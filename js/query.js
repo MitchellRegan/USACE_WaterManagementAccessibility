@@ -133,8 +133,8 @@ function addBoxAnnotation(info) {
     let anno = {
         id: info["EVT_TITLE"],
         type: 'box',
-        xMin: (new Date(info["EVT_STARTDATE"])).toLocaleString(),
-        xMax: (new Date(info["EVT_ENDDATE"])).toLocaleString(),
+        xMin: (new Date(info["EVT_STARTDATE"]*1000)).toLocaleString(),
+        xMax: (new Date(info["EVT_ENDDATE"]*1000)).toLocaleString(),
         yMin: myGraph.scales.min,
         yMax: myGraph.scales.max,
         backgroundColor: 'rgba(255, 99, 132, 0.25)',
