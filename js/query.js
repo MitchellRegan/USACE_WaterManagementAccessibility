@@ -8,10 +8,12 @@ function $(query) {
 const granularity = 1;
 let annotations = [];
 let myGraph;
+let timeRange;
 
 // init("02098197");
 
 async function init(siteID, days) {
+    timeRange = days;
     if (myGraph != undefined) {
         myGraph.destroy();
         annotations = [];
@@ -40,6 +42,7 @@ async function init(siteID, days) {
             let info = dB["HISTORICAL_EVENTS"][evt_id];
             console.log(info)
             addBoxAnnotation(info);
+            myGraph.update();
         }
     }
 }
@@ -72,11 +75,12 @@ function parseData(json) {
         }
 
         labels = dataPoints.map((dataPoint) => {
-            return (new Date(dataPoint.dateTime)).toLocaleString();
+            // return (new Date(dataPoint.dateTime)).toLocaleString();
+            return dataPoint.dateTime;
         });
-        labels = labels.filter((elem, index) => {
-            return index % granularity == 0;
-        });
+        // labels = labels.filter((elem, index) => {
+        //     return index % granularity == 0;
+        // });
 
         let data = dataPoints.map((dataPoint) => {
             return parseFloat(dataPoint.value);
@@ -98,6 +102,20 @@ function makeGraph(ctx, labels, datasets) {
         scales: {
             y: {
                 beginAtZero: false
+            },
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'hour',
+                    displayFormats: {
+                        'hour': 'hh a',
+                        'day': 'MMM dd',
+                        'week': 'MMM dd',
+                        'month': 'MMM dd',
+                        'quarter': 'MMM dd',
+                        'year': 'MMM dd',
+                    }
+                },
             }
         },
         animation: {
@@ -108,7 +126,7 @@ function makeGraph(ctx, labels, datasets) {
                 onClick: toggleLegendClickHandler
             },
             decimation: {
-                enabled: false,
+                enabled: true,
                 threshold: 1,
             },
             annotation: {
@@ -116,41 +134,61 @@ function makeGraph(ctx, labels, datasets) {
                 annotations
             }
         },
+        // /*FIXME:*/ parsing: false,
     };
     myGraph = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
-            datasets: datasets
+            datasets: datasets,
         },
         options
     });
 }
 
 function addBoxAnnotation(info) {
-    // FIXME: Display only if time on graph
-    // TODO: Should have popup info or something
+    let it = new Image();
+    it.src = info["EVT_IMAGE"];
     let anno = {
         id: info["EVT_TITLE"],
         type: 'box',
-        xMin: (new Date(info["EVT_STARTDATE"]*1000)).toLocaleString(),
-        xMax: (new Date(info["EVT_ENDDATE"]*1000)).toLocaleString(),
-        yMin: myGraph.scales.min,
-        yMax: myGraph.scales.max,
+        label: {
+            content: [info["EVT_TITLE"], info["EVT_DESC"], it],
+            /*TODO:*/display: false,
+        },
+        xMin: info["EVT_STARTDATE"] * 1000,
+        xMax: info["EVT_ENDDATE"] * 1000,
         backgroundColor: 'rgba(255, 99, 132, 0.25)',
         enter: function ({ element }) {
-            console.log(element);
-            element.options.backgroundColor = "#00ff00";
             return true;
         },
         click: function ({ chart, element }) {
+            console.log(element);
+            myGraph.update();
             return true;
         },
         leave: function ({ element }) {
-            element.options.backgroundColor = "#ff0000";
             return true;
         },
+        display: false,
     };
+    if (myGraph.scales.x.max > anno.xMax && anno.xMax > myGraph.scales.x.min) {
+        // At least showing on left of graph so display
+        anno.display = true;
+        if (anno.xMin < myGraph.scales.x.min) {
+            // The left side of range is off the graph so trim
+            anno._xMin = anno.xMin;
+            anno.xMin = myGraph.scales.x.min;
+        }
+    } else if (myGraph.scales.x.min < anno.xMin && anno.xMin < myGraph.scales.x.max) {
+        // At least showing on right of graph so display
+        anno.display = true;
+        if (anno.xMax > myGraph.scales.x.max) {
+            // The right side of range is off the graph so trim
+            anno._xMax = anno.xMin;
+            anno.xMax = myGraph.scales.x.max;
+        }
+    }
     annotations.push(anno);
 }
 
