@@ -2,7 +2,6 @@ function $(query) {
     if (query.includes("#")) return document.querySelector(query);
     return document.querySelectorAll(query);
 }
-
 // https://help.waterdata.usgs.gov/faq/automated-retrievals#Examples
 
 const granularity = 1;
@@ -89,11 +88,13 @@ function parseData(json) {
             return index % granularity == 0;
         });
 
-        let obj = { label, data: scrunched, hidden: true };
+        let obj = { label, data: scrunched, hidden: false };
         // console.log(obj);
         datasets.push(obj);
     }
     datasets[0].hidden = false;
+    // FIXME: Hardcoded
+    datasets[0].yAxisID = 'y1';
     return { labels, datasets };
 }
 
@@ -102,6 +103,18 @@ function makeGraph(ctx, labels, datasets) {
         scales: {
             y: {
                 beginAtZero: false
+            },
+            // TODO: Make it so y-axis stays relative https://www.chartjs.org/docs/latest/samples/line/multi-axis.html
+            y1: {
+                beginAtZero: false,
+                type: 'linear',
+                display: true,
+                position: 'right',
+
+                // grid line settings
+                grid: {
+                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+                },
             },
             x: {
                 type: 'time',
@@ -126,6 +139,7 @@ function makeGraph(ctx, labels, datasets) {
                 onClick: toggleLegendClickHandler
             },
             decimation: {
+                // FIXME: https://www.chartjs.org/docs/latest/configuration/decimation.html
                 enabled: true,
                 threshold: 1,
             },
@@ -194,12 +208,22 @@ function addBoxAnnotation(info) {
 
 function toggleLegendClickHandler(e, legendItem, legend) {
     let index = legendItem.datasetIndex;
-    console.log("legendItem.datasetIndex: " + index);
+    
     const ci = legend.chart;
-    for (let i = 0; i < legend.legendHitBoxes.length; i++) {
-        ci.hide(i);
+    if (ci.isDatasetVisible(index)) {
+        ci.hide(index);
+        legendItem.hidden = false;
+    } else {
+        ci.show(index);
         legendItem.hidden = true;
     }
-    ci.show(index);
-    legendItem.hidden = false;
+
+    // let numShowing = myGraph.getVisibleDatasetCount();
+    // if (numShowing > 1) {
+    //     myGraph.options.scales.y1.display = true;
+    // } else {
+    //     myGraph.options.scales.y1.display = false;
+    // }
+
+    myGraph.update();
 }
