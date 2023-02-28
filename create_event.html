@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Event | USACE</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- JS -->
+    <script type="text/javascript" src="./js/create_database_event.js"></script>
+</head>
+
+<body>
+    
+</body>
+    <!--form id="evtForm" onsubmit="return submitForm(this)"-->
+        <label for="evtTitle">Event Title*:</label><br>
+        <input type="text" id="evtTitle" name="evtTitle" required=True><br>
+        <br>
+        <label for="evtDesc">Event Description*:</label><br>
+        <textarea id="evtDesc" name="evtDesc" required=True form="evtForm" rows=4 cols=40></textarea><br>
+        <!--input type="text" id="evtDesc" name="evtDesc" required=True><br-->
+        <br>
+        <label for="evtStart">Start Date*:</label>
+        <input type="date" id="evtStart" name="evtStart" required=True>
+        <input type="time" id="evtStartTime" name="evtStartTime" value="00:00"><br>
+        <label for="evtEnd">End Date*: </label>
+        <input type="date" id="evtEnd" name="evtEnd" required=True>
+        <input type="time" id="evtEndTime" name="evtEndTime" value="23:59"><br>
+        <br>
+        <label for="evtImg">Image URL:</label>
+        <input type="url" id="evtImg" name="evtImg"><br>
+        <br>
+        <button onclick="writeDatabaseEvt(('#evtTitle').value, ('#evtDesc').value, ('#evtStart').value, ('#evtEnd').value, ('#evtImg').value)">Submit</button>
+        <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
+    <p>* indicates required fields</p>
+</html>
