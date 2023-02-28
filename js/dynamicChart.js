@@ -1,3 +1,5 @@
+getTimeSeries($('#search').value, $('#office').value, $('#hours').value)
+
 function $(query) {
     if (query.includes("#")) return document.querySelector(query);
     return document.querySelectorAll(query);
