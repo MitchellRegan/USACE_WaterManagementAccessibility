@@ -9,7 +9,7 @@ let annotations = [];
 let myGraph;
 let timeRange;
 
-// init("02098197");
+init("02098197", 1);
 
 async function init(siteID, days) {
     timeRange = days;
@@ -102,14 +102,15 @@ function makeGraph(ctx, labels, datasets) {
     const options = {
         scales: {
             y: {
-                beginAtZero: false
+                beginAtZero: false,
+                position: 'right',
             },
             // TODO: Make it so y-axis stays relative https://www.chartjs.org/docs/latest/samples/line/multi-axis.html
             y1: {
                 beginAtZero: false,
                 type: 'linear',
                 display: true,
-                position: 'right',
+                position: 'left',
 
                 // grid line settings
                 grid: {
@@ -168,7 +169,7 @@ function addBoxAnnotation(info) {
         type: 'box',
         label: {
             content: [info["EVT_TITLE"], info["EVT_DESC"], it],
-            /*TODO:*/display: false,
+            /*TODO:*/display: true,
         },
         xMin: info["EVT_STARTDATE"] * 1000,
         xMax: info["EVT_ENDDATE"] * 1000,
