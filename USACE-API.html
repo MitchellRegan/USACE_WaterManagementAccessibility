@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Water Levels | USACE</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.2/chartjs-plugin-annotation.min.js" integrity="sha512-6dmCqRV2/iXtbm8z/9+7bzLhOkmXvq9R6WoR+8QgrojgMU0/Nin+/eaWouEGEU5ishyKDYgRoiq7kURCVmwmqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script defer type="text/javascript" src="./js/dynamicChart.js"></script>
+</head>
+
+<body>
+    <!-- <label for="locID">Location ID:</label>
+    <input id="locID" type="text" value="02098197" />
+    <label for="days">Days:</label>
+    <input id="days" type="number" value="1" />
+    <button onclick="init($('#locID').value, $('#days').value)">Graph!</button> -->
+
+    <input id="search" type="text" value="JPLT2" placeholder="Name"/>
+    <input id="office" type="text" value="SWF" placeholder="Office"/>
+    <input id="hours" type="number" value="24" placeholder="Hours"/>
+    <button onclick="search($('#search').value)">Search!</button>
+    <button onclick="getTimeSeries($('#search').value, $('#office').value, $('#hours').value)">Graph!</button>
+
+    <p>
+        <!-- Something really funky is going on. First, the API used directly on the USACE website is blocked by CORS, yay. That means we can't use it on the website.<br>
+        <br>
+        <div style="text-decoration:line-through">
+            I found a slightly better wiki on the CWMS-radar-api repo. It links to that Swagger-UI we were looking at (the API doc webpage).<br>
+        The issue is, the docs has completely vanished. It is completely inaccessible and 404s. YAYYYYY<br>
+        <br>
+        So pretty much, that leaves us with ths USGS api because it appears to be the only reliable API at the moment.<br>
+        That then just leaves us with the issue that we have no idea which sites are USACE and which arent. YAAAAAYAYAYYAYAYAY<br></div>
+        <br>
+        Scratch all of that, it is back up. Maybe it was the network, maybe it was down, I don't know. But it's back now.<br>
+        It does seem to be rather slow tho... 😔<br>
+        <br> -->
+        So here's the thing, it is painfully slow. It still kinda works tho. Try <b>JPLT2, SWF, 24</b>. Then just wait, it is painful.
+    </p>
+
+
+    <h1 id="name"></h1>
+    <p id="description"></p>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+</body>
+
+</html>
