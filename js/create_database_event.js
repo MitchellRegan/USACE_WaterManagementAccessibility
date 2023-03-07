@@ -1,21 +1,18 @@
-async function queryDB() {
-    const dBQuery = new Request("https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS/.json/?");
-    let dB = await fetch(dBQuery);
-    dB = await dB.json();
-    return dB;
-}
-
-
-function toEpochTime(edate, timezone){
-    console.log(edate, timezone)
-    let d = new Date();
-    d.toUTCString()
-}
-
-
+/**
+* Function called from create_event.html on form submission.
+*/
 async function writeDatabaseEvt(title, desc, startDate, endDate, timezone, img){
-    //const db = queryDB();
-    //console.log(db);
+    const db = queryDB();
+    console.log(db.HISTORICAL_EVENTS);
     
-    let evtStart = toEpochTime(startDate, timezone);
+    let evtStart = (startDate.getTime() / 1000) + (3600 * timezone);
+    let evtEnd = (endDate.getTime() / 1000) + (3600 * timezone);
+    
+    let evtjson = {
+        "EVT_DESC":desc,
+        "EVT_ENDDATE":evtEnd,
+        "EVT_IMAGE":img,
+        "EVT_STARTDATE":evtStart,
+        "EVT_TITLE":title
+    };
 }
