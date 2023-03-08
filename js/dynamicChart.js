@@ -1,15 +1,36 @@
-getTimeSeries($('#search').value, $('#office').value, $('#hours').value)
+// getTimeSeries($('#search').value, $('#office').value, $('#hours').value)
+
+fetchNameMeta();
+
+async function fetchNameMeta() {
+    let raw = await fetch('../json/meta.json');
+    window["names"] = await raw.json();
+    
+    window["states"] = {};
+}
 
 function $(query) {
     if (query.includes("#")) return document.querySelector(query);
     return document.querySelectorAll(query);
 }
 
-function search(keywrd) {
-    let request = new Request(`https://cwms-data.usace.army.mil/cwms-data/catalog/LOCATIONS?like=${keywrd}`);
-    fetch(request).then((res) => res.json()).then((json) => {
-        console.log(json);
-    });
+function search() {
+    let query = new RegExp($('#search').value, "i");
+    for (let letter of Object.getOwnPropertyNames(names)) {
+        for (let curr of names[letter]) {
+            if ((curr["public-name"] && curr["public-name"].match(query) != null)
+                || (curr["long-name"] && curr["long-name"].match(query) != null)
+                || (curr["description"] && curr["description"].match(query) != null)
+                || (curr["map-label"] && curr["map-label"].match(query) != null
+                || (curr["name"] && curr["name"].match(query) != null))
+            ) console.log(curr); // TODO: Not consolelog
+            if (curr["state"] != undefined) {
+                let state = curr["state"];
+                if (states[state] == undefined) states[state] = [];
+                states[state].push(curr);
+            }
+        }
+    }
 }
 
 function getTimeSeries(name, office="", hours=24) {
