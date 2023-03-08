@@ -3,7 +3,7 @@
 fetchNameMeta();
 
 async function fetchNameMeta() {
-    let raw = await fetch('../json/meta.json');
+    let raw = await fetch('./json/meta.json');
     window["names"] = await raw.json();
     
     window["states"] = {};
