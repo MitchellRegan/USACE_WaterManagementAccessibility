@@ -16,8 +16,8 @@ function $(query) {
 
 function search() {
     let query = new RegExp($('#search').value, "i");
-    for (let letter of Object.getOwnPropertyNames(names)) {
-        for (let curr of names[letter]) {
+    for (let letter of Object.getOwnPropertyNames(window["names"])) {
+        for (let curr of window["names"][letter]) {
             if ((curr["public-name"] && curr["public-name"].match(query) != null)
                 || (curr["long-name"] && curr["long-name"].match(query) != null)
                 || (curr["description"] && curr["description"].match(query) != null)
@@ -26,8 +26,8 @@ function search() {
             ) console.log(curr); // TODO: Not consolelog
             if (curr["state"] != undefined) {
                 let state = curr["state"];
-                if (states[state] == undefined) states[state] = [];
-                states[state].push(curr);
+                if (window["states"][state] == undefined) window["states"][state] = [];
+                window["states"][state].push(curr);
             }
         }
     }
