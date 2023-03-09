@@ -12,12 +12,62 @@
     
     <!-- JS -->
     <script type="text/javascript" src="./js/create_database_event.js"></script>
+    
+    <!-- Firebase OAuth CDN -->
+    <!-- Reference: https://github.com/firebase/firebaseui-web -->
+    <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
+    <script type="text/javascript">
+        initApp = function() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
+                authDomain: "mregan-capstone.firebaseapp.com",
+                databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
+                projectId: "mregan-capstone",
+                storageBucket: "mregan-capstone.appspot.com",
+                messagingSenderId: "736102415357",
+                appId: "1:736102415357:web:06211517f034486cc37794"
+            };
+            const app = firebase.initializeApp(firebaseConfig);
+            firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var uid = user.uid;
+                var phoneNumber = user.phoneNumber;
+                var providerData = user.providerData;
+
+
+                document.getElementById("uid").nodeValue = user.displayName;
+            } else {
+                // User is signed out.
+                document.getElementById('sign-in-status').textContent = 'Signed out';
+                document.getElementById('sign-in').textContent = 'Sign in';
+                document.getElementById('account-details').textContent = 'null';
+            }
+            }, function(error) {
+                console.log(error);
+            });
+        };
+
+        window.addEventListener('load', function() {
+            initApp()
+        });
+    </script>
 </head>
 
 <body>
     
 </body>
     <form id="evtForm">
+        <h1>New Historical Event</h1>
+        <p>This page is for creating a new historical event to show up on the water data graphs.</p>
+        <label for="uid">Signed in as:</label><br>
+        <input type="text" id="uid" readonly=false><br>
+        <br>
         <label for="evtTitle">Event Title*:</label><br>
         <input type="text" id="evtTitle" name="evtTitle" required=True><br>
         <br>
