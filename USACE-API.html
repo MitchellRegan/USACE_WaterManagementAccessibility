@@ -19,9 +19,10 @@
 
 <body>
     <div>
-        <input id="search" type="text" value="JPLT2" onchange="search()" placeholder="Search Parameter"/>
-        <p>* Shows first 100 results.</p>
-        <!-- <button onclick="search()">Search!</button> -->
+        <label for="search">Search Value:</label>
+        <input id="search" type="text" onkeyup="search()" placeholder="Search Parameter"/>
+        <label for="numResults">Displayed Results:</label>
+        <input id="numResults" type="number" placeholder="AVOID HUGE VALUES">
         <div id="results">
         </div>
     </div>
