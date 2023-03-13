@@ -26,9 +26,8 @@ function search() {
                 || (curr["name"] && curr["name"].match(query) != null))
             ) {
                 count++;
-                // $("#results").
                 craftResult(curr);
-                if (count > 100) return;
+                if (count > ($("#numResults").value || 20)) return;
             }
             if (curr["state"] != undefined) {
                 let state = curr["state"];
@@ -51,10 +50,21 @@ function craftResult(metaData) {
         <p>${metaData["map-label"] || ""}</p>
         <p>${metaData["name"] || ""}</p>
         <a target="blank" href="https://www.google.com/maps/search/?api=1&query=${metaData["latitude"]},${metaData["longitude"]}">View on Map</a>
-        <button>Graph!</button>
+        <button onclick="findTimeSeries(this.parentElement)">Find Timeseries!</button>
     `;
+    result.dataset.name = metaData["name"];
+    result.dataset.office = metaData["office"];
     result.classList.add("result");
     $("#results").appendChild(result);
+}
+
+async function findTimeSeries(elem) {
+    // TODO: Visualize picker / fetch them all?
+    console.log(elem.dataset.name, elem.dataset.office);
+    const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/catalog/timeseries?office=${elem.dataset.office}&like=${elem.dataset.name}%5C.`);
+    const res = await fetch(query);
+    const json = await res.json();
+    console.log(json);
 }
 
 // function getTimeSeries(name, office="", hours=24) {
