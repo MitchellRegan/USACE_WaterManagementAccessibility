@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>USACE Login | USACE</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Firebase OAuth CDN -->
+    <!-- Reference: https://github.com/firebase/firebaseui-web -->
+    <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css" />
+    <script type="text/javascript">
+        //import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        // FirebaseUI config.
+        var uiConfig = {
+            signInSuccessUrl: './create_event.html',
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID
+            ]
+        };
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
+            authDomain: "mregan-capstone.firebaseapp.com",
+            databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
+            projectId: "mregan-capstone",
+            storageBucket: "mregan-capstone.appspot.com",
+            messagingSenderId: "736102415357",
+            appId: "1:736102415357:web:06211517f034486cc37794"
+        };
+
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        const app = firebase.initializeApp(firebaseConfig);
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+</head>
+    
+<body>
+    <div style="align-self:center; width:400px">
+        <h1>USACE Login</h1>
+        <p>Please login to access the event creation screen.</p>
+        <div id="firebaseui-auth-container"></div>
+    </div>
+</body>
+    
+</html>
