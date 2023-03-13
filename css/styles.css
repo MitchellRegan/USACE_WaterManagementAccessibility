@@ -1,7 +1,29 @@
-body {
-    
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
     color: darkgreen;
+}
+
+#results {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+}
+
+#results > * {
+    flex: 1 0 content;
+    flex-wrap: wrap;
+    background-color: gray;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 300px;
+}
+
+#results > * > * {
+    text-align: center;
 }
