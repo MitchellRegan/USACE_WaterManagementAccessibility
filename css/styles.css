@@ -8,13 +8,13 @@ h1 {
     color: darkgreen;
 }
 
-#results {
+.listContainer {
     width: 100%;
     display: flex;
     overflow: auto;
 }
 
-#results > * {
+.listContainer > * {
     flex: 1 0 content;
     flex-wrap: wrap;
     background-color: gray;
@@ -24,6 +24,6 @@ h1 {
     max-width: 300px;
 }
 
-#results > * > * {
+/* .listContainer > * > * {
     text-align: center;
-}
+} */
