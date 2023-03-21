@@ -103,10 +103,6 @@ async function findTimeSeries(elem, id="#timeSeries") {
     const json = await res.json();
     for (let timeSeries of json.entries) {
         craftTimeSeriesSelector(timeSeries, id);
-    //     const subQuery = new Request(`https://cwms-data.usace.army.mil/cwms-data/timeseries?office=${office}&name=${encodeURIComponent(curr)}&begin=PT-${$("#numResults").value || 24}h`);
-    //     fetch(subQuery).then(subRes => subRes.json()).then(subJson =>
-    //         console.log(subJson)
-    //     );
     }
     if (json.entries.length == 0) {
         $(id).innerHTML = "<h3>No Time Series Found :(</h3>";
