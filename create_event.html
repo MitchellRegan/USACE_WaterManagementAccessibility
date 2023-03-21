@@ -41,6 +41,9 @@
                 var uid = user.uid;
                 var phoneNumber = user.phoneNumber;
                 var providerData = user.providerData;
+                var token = undefined;
+                user.getIdToken()
+                    .then(t => {token = t;})
                 
                 document.getElementById("uid").value = user.displayName;
                 document.getElementById('signedIn').style.display = 'visible';
@@ -79,7 +82,7 @@
             <textarea id="evtDesc" name="evtDesc" required=True form="evtForm" rows=4 cols=40></textarea><br><br>
 
             <label for="siteSearch">Affected Water Sites<i class="requiredText">*</i>:</label><br>
-            <input type="search" id="siteSearch" name="siteSearch" placeholder="Search Water Sites" list="siteList" onchange="findSiteOptions(document.getElementById('siteSearch').value)"><br>
+            <input type="search" id="siteSearch" name="siteSearch" placeholder="Search Water Sites" list="siteList" required=True onchange="findSiteOptions(document.getElementById('siteSearch').value)"><br>
             <datalist id="siteList"></datalist><br>
 
             <label for="evtStart">Start Date<i class="requiredText">*</i>:</label>
@@ -136,8 +139,10 @@
             <input type="url" id="evtImg" name="evtImg"><br><br>
             <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
         </form>
-        <button onclick="writeDatabaseEvt(document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)">Submit</button>
+        <button onclick="writeDatabaseEvt(document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('siteSearch').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)">Submit</button>
         <p><i class="requiredText">*</i> indicates required fields</p>
+        
+        <!--button onclick="testWriteDb(document.getElementById('evtDesc').value)">TEST</button-->
     </div>
 </body>
 </html>
