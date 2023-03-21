@@ -1,8 +1,15 @@
 /**
  * TODO: yeah
  */
-function graphTimeSeries() {
-
+async function graphTimeSeries(elem) {
+    let meta = JSON.parse(elem.dataset.json);
+    console.log(meta);
+    let office = meta.office;
+    let name = meta.name;
+    const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/timeseries?office=${office}&name=${encodeURIComponent(name)}&begin=PT-${$("#numResults").value || 24}h`);
+    const res = await fetch(query);
+    const data = await res.json();
+    console.log(data);
 }
 
 
