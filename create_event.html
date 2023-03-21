@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="css/styles.css">
     
     <!-- JS -->
-    <script type="text/javascript" src="./js/create_database_event.js"></script>
+    <script defer type="text/javascript" src="./js/create_database_event.js"></script>
+    <script defer type="text/javascript" src="./js/common.js"></script>
     
     <!-- Firebase OAuth CDN -->
     <!-- Reference: https://github.com/firebase/firebaseui-web -->
@@ -40,14 +41,14 @@
                 var uid = user.uid;
                 var phoneNumber = user.phoneNumber;
                 var providerData = user.providerData;
-
-
-                document.getElementById("uid").nodeValue = user.displayName;
+                
+                document.getElementById("uid").value = user.displayName;
+                document.getElementById('signedIn').style.display = 'visible';
+                document.getElementById('signedOut').style.display = 'none';
             } else {
                 // User is signed out.
-                document.getElementById('sign-in-status').textContent = 'Signed out';
-                document.getElementById('sign-in').textContent = 'Sign in';
-                document.getElementById('account-details').textContent = 'null';
+                document.getElementById('signedIn').style.display = 'none';
+                document.getElementById('signedOut').style.display = 'visible';
             }
             }, function(error) {
                 console.log(error);
@@ -61,77 +62,82 @@
 </head>
 
 <body>
-    
+    <h1>New Historical Event</h1>
+    <p>This page is for creating a new historical event to show up on the water data graphs.</p>
+    <div id="signedOut">
+        <p>You are not signed in. Please click <a href="usace_login.html">here</a> to sign-in to your U.S.A.C.E. account in order to access this page.</p>
+    </div>
+    <div id="signedIn">
+        <form id="evtForm">
+            <label for="uid">Signed in as:</label><br>
+            <input type="text" id="uid" readonly=false><br><br>
+
+            <label for="evtTitle" style=".requiredText">Event Title<i class="requiredText">*</i>:</label><br>
+            <input type="text" id="evtTitle" name="evtTitle" required=True><br><br>
+
+            <label for="evtDesc">Event Description<i class="requiredText">*</i>:</label><br>
+            <textarea id="evtDesc" name="evtDesc" required=True form="evtForm" rows=4 cols=40></textarea><br><br>
+
+            <label for="siteSearch">Affected Water Sites<i class="requiredText">*</i>:</label><br>
+            <input type="search" id="siteSearch" name="siteSearch" placeholder="Search Water Sites" list="siteList" onchange="findSiteOptions(document.getElementById('siteSearch').value)"><br>
+            <datalist id="siteList"></datalist><br>
+
+            <label for="evtStart">Start Date<i class="requiredText">*</i>:</label>
+            <input type="datetime-local" id="evtStart" name="evtStart" required=True><br>
+            <label for="evtEnd">End Date<i class="requiredText">*</i>: </label>
+            <input type="datetime-local" id="evtEnd" name="evtEnd" required=True><br>
+
+            <!-- Taken from https://gist.github.com/nodesocket/3919205 -->
+            <label for="evtTZ">Timezone:</label>
+            <select name="evtTZ" id="evtTZ">
+                <option value=-12>(GMT -12:00) Eniwetok, Kwajalein</option>
+                <option value=-11>(GMT -11:00) Midway Island, Samoa</option>
+                <option value=-10>(GMT -10:00) Hawaii</option>
+                <option value=-9.5>(GMT -9:30) Taiohae</option>
+                <option value=-9>(GMT -9:00) Alaska</option>
+                <option value=-8>(GMT -8:00) Pacific Time (US &amp; Canada)</option>
+                <option value=-7>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+                <option value=-6 selected="selected">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
+                <option value=-5>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+                <option value=-4.5>(GMT -4:30) Caracas</option>
+                <option value=-4>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+                <option value=-3.5>(GMT -3:30) Newfoundland</option>
+                <option value=-3>(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
+                <option value=-2>(GMT -2:00) Mid-Atlantic</option>
+                <option value=-1>(GMT -1:00) Azores, Cape Verde Islands</option>
+                <option value=0>(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
+                <option value=1>(GMT +1:00) Brussels, Copenhagen, Madrid, Paris</option>
+                <option value=2>(GMT +2:00) Kaliningrad, South Africa</option>
+                <option value=3>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+                <option value=3.5>(GMT +3:30) Tehran</option>
+                <option value=4>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+                <option value=4.5>(GMT +4:30) Kabul</option>
+                <option value=5>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+                <option value=5.5>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+                <option value=5.75>(GMT +5:45) Kathmandu, Pokhara</option>
+                <option value=6>(GMT +6:00) Almaty, Dhaka, Colombo</option>
+                <option value=6.5>(GMT +6:30) Yangon, Mandalay</option>
+                <option value=7>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+                <option value=8>(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+                <option value=8.75>(GMT +8:45) Eucla</option>
+                <option value=9>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+                <option value=9.5>(GMT +9:30) Adelaide, Darwin</option>
+                <option value=10>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+                <option value=10.5>(GMT +10:30) Lord Howe Island</option>
+                <option value=11>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+                <option value=11.5>(GMT +11:30) Norfolk Island</option>
+                <option value=12>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+                <option value=12.75>(GMT +12:45) Chatham Islands</option>
+                <option value=13>(GMT +13:00) Apia, Nukualofa</option>
+                <option value=14>(GMT +14:00) Line Islands, Tokelau</option>
+            </select><br><br>
+
+            <label for="evtImg">Image URL:</label>
+            <input type="url" id="evtImg" name="evtImg"><br><br>
+            <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
+        </form>
+        <button onclick="writeDatabaseEvt(document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)">Submit</button>
+        <p><i class="requiredText">*</i> indicates required fields</p>
+    </div>
 </body>
-    <form id="evtForm">
-        <h1>New Historical Event</h1>
-        <p>This page is for creating a new historical event to show up on the water data graphs.</p>
-        <label for="uid">Signed in as:</label><br>
-        <input type="text" id="uid" readonly=false><br>
-        <br>
-        <label for="evtTitle">Event Title*:</label><br>
-        <input type="text" id="evtTitle" name="evtTitle" required=True><br>
-        <br>
-        <label for="evtDesc">Event Description*:</label><br>
-        <textarea id="evtDesc" name="evtDesc" required=True form="evtForm" rows=4 cols=40></textarea><br>
-        <!--input type="text" id="evtDesc" name="evtDesc" required=True><br-->
-        <br>
-        <label for="evtStart">Start Date*:</label>
-        <input type="datetime-local" id="evtStart" name="evtStart" required=True><br>
-        <label for="evtEnd">End Date*: </label>
-        <input type="datetime-local" id="evtEnd" name="evtEnd" required=True><br>
-        <br>
-        
-        <!-- Taken from https://gist.github.com/nodesocket/3919205 -->
-        <label for="evtTZ">Timezone:</label>
-        <select name="evtTZ" id="evtTZ">
-            <option value=-12>(GMT -12:00) Eniwetok, Kwajalein</option>
-            <option value=-11>(GMT -11:00) Midway Island, Samoa</option>
-            <option value=-10>(GMT -10:00) Hawaii</option>
-            <option value=-9.5>(GMT -9:30) Taiohae</option>
-            <option value=-9>(GMT -9:00) Alaska</option>
-            <option value=-8>(GMT -8:00) Pacific Time (US &amp; Canada)</option>
-            <option value=-7>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
-            <option value=-6 selected="selected">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
-            <option value=-5>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-            <option value=-4.5>(GMT -4:30) Caracas</option>
-            <option value=-4>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
-            <option value=-3.5>(GMT -3:30) Newfoundland</option>
-            <option value=-3>(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
-            <option value=-2>(GMT -2:00) Mid-Atlantic</option>
-            <option value=-1>(GMT -1:00) Azores, Cape Verde Islands</option>
-            <option value=0>(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
-            <option value=1>(GMT +1:00) Brussels, Copenhagen, Madrid, Paris</option>
-            <option value=2>(GMT +2:00) Kaliningrad, South Africa</option>
-            <option value=3>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
-            <option value=3.5>(GMT +3:30) Tehran</option>
-            <option value=4>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-            <option value=4.5>(GMT +4:30) Kabul</option>
-            <option value=5>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-            <option value=5.5>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-            <option value=5.75>(GMT +5:45) Kathmandu, Pokhara</option>
-            <option value=6>(GMT +6:00) Almaty, Dhaka, Colombo</option>
-            <option value=6.5>(GMT +6:30) Yangon, Mandalay</option>
-            <option value=7>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
-            <option value=8>(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
-            <option value=8.75>(GMT +8:45) Eucla</option>
-            <option value=9>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-            <option value=9.5>(GMT +9:30) Adelaide, Darwin</option>
-            <option value=10>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
-            <option value=10.5>(GMT +10:30) Lord Howe Island</option>
-            <option value=11>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
-            <option value=11.5>(GMT +11:30) Norfolk Island</option>
-            <option value=12>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
-            <option value=12.75>(GMT +12:45) Chatham Islands</option>
-            <option value=13>(GMT +13:00) Apia, Nukualofa</option>
-            <option value=14>(GMT +14:00) Line Islands, Tokelau</option>
-        </select><br>
-        <br>
-        <label for="evtImg">Image URL:</label>
-        <input type="url" id="evtImg" name="evtImg"><br>
-        <br>
-        <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
-    </form>
-    <button onclick="writeDatabaseEvt(document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)">Submit</button>
-    <p>* indicates required fields</p>
 </html>
