@@ -92,6 +92,7 @@ function craftResult(metaData, id) {
  * @param {HTMLElement} elem The element whose `Find Timeseries!` button was pressed.
  * @param {String} id A CSS ID indicating where the selectors should be added.
  * @async
+ * @TODO: Loading anim
  */
 async function findTimeSeries(elem, id="#timeSeries") {
     $(id).innerHTML = "";
