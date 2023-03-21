@@ -1,3 +1,12 @@
+/** File Information
+ * This file is for **generating** the `meta.json` file.  
+ * It is not perfect, it gets 504 errors often, but I think that is on the API mostly. It eventually works with more attempts.  
+ * 
+ * TODO: Make total check dynamic (get all water locations and check `total` attribute)
+ * TODO: This is *already* out of date, but is a good proof-of-concept
+ */
+
+/***/
 const fs = require("fs");
 
 let total = 0;
