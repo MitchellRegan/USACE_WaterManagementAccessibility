@@ -52,6 +52,32 @@
         // The start method will wait until the DOM is loaded.
         ui.start('#firebaseui-auth-container', uiConfig);
     </script>
+    <!--Script to check if a user is already logged-in. If so, forwards to the create_event.html page-->
+    <script type="text/javascript">
+        initApp = function() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
+                authDomain: "mregan-capstone.firebaseapp.com",
+                databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
+                projectId: "mregan-capstone",
+                storageBucket: "mregan-capstone.appspot.com",
+                messagingSenderId: "736102415357",
+                appId: "1:736102415357:web:06211517f034486cc37794"
+            };
+            const app = firebase.initializeApp(firebaseConfig);
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    window.location.href = "./create_event.html";
+                }
+            }, function(error) {
+                console.log(error);
+            });
+        };
+
+        window.addEventListener('load', function() {
+            initApp()
+        });
+    </script>
 </head>
     
 <body>
