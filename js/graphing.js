@@ -2,7 +2,6 @@ let annotations = [];
 let myGraph;
 
 /**
- * @TODO: Loading anim
  */
 async function graphTimeSeries(elem) {
     toggleLoader();
