@@ -28,7 +28,7 @@ fetchNameMeta();
  * Also sorts the data (by state) into a window namespaced variable: `window.states`.
  * @TODO: Ignore special chars [. , etc.]
  */
-function search(id="#results") {
+function search(id = "#results") {
     let query = new RegExp($('#search').value, "i");
     let count = 0;
     $(id).innerHTML = "";
@@ -94,7 +94,8 @@ function craftResult(metaData, id) {
  * @async
  * @TODO: Loading anim
  */
-async function findTimeSeries(elem, id="#timeSeries") {
+async function findTimeSeries(elem, id = "#timeSeries") {
+    toggleLoader();
     $(id).innerHTML = "";
     console.log(elem.dataset.name, elem.dataset.office);
     let office = elem.dataset.office;
@@ -108,6 +109,7 @@ async function findTimeSeries(elem, id="#timeSeries") {
     if (json.entries.length == 0) {
         $(id).innerHTML = "<h3>No Time Series Found :(</h3>";
     }
+    toggleLoader();
 }
 
 /**
@@ -131,4 +133,14 @@ function craftTimeSeriesSelector(metaData, id) {
     result.dataset.json = JSON.stringify(metaData);
     result.classList.add("result");
     $(id).appendChild(result);
+}
+
+function toggleLoader() {
+    if ($(".loader")[0].style.display == "block") {
+        $(".cover")[0].style.display = "none";
+        $(".loader")[0].style.display = "none";
+    } else {
+        $(".cover")[0].style.display = "block";
+        $(".loader")[0].style.display = "block";
+    }
 }

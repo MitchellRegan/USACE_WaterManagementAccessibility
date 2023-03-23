@@ -5,6 +5,7 @@ let myGraph;
  * @TODO: Loading anim
  */
 async function graphTimeSeries(elem) {
+    toggleLoader();
     if (myGraph != undefined) {
         // TODO: overlay instead of destroy
         myGraph.destroy();
@@ -21,31 +22,34 @@ async function graphTimeSeries(elem) {
     let res = await queryAPI(office, siteID);
     res = res["time-series"];
 
-    if (res["time-series"].length == 0) throw "No Data!";
-    if (res["time-series"].length > 1) throw "Too much data?";
-    if (res["time-series"][0].error != undefined) throw res["time-series"][0].error;
+    if (res["time-series"].length == 0) console.error("No Data!");
+    if (res["time-series"].length > 1) console.error("Too much data?");
+    if (res["time-series"][0].error) console.error(res["time-series"][0].error);
 
-    const ctx = $('#myChart');
-    let { labels, datasets } = parseData(res);
-    console.log(labels, datasets)
-    makeGraph(ctx, labels, datasets);
+    else {
+        const ctx = $('#myChart');
+        let { labels, datasets } = parseData(res);
+        console.log(labels, datasets)
+        makeGraph(ctx, labels, datasets);
 
-    if (siteID in dB["WATER_SITES"]) {
-        $("#name").innerText = dB["WATER_SITES"][siteID]["SITE_NAME"];
-        $("#description").innerText = dB["WATER_SITES"][siteID]["SITE_DESC"];
-    }
-    if (siteID in dB["EVENT_SITES"]) {
-        for (let annotation of dB["EVENT_SITES"][siteID]) {
-            let evt_id = annotation["EVT_ID"];
-            // FIXME: Each object in the dB["EVENT_SITES"][siteID] array should contain the event's id.
-            evt_id = 0;
-            // FIXME: HISTORICAL_EVENTS should be an object containing objects, not an array. Then each can be identified and accessed by its id.
-            let info = dB["HISTORICAL_EVENTS"][evt_id];
-            console.log(info)
-            addBoxAnnotation(info);
-            myGraph.update();
+        if (siteID in dB["WATER_SITES"]) {
+            $("#name").innerText = dB["WATER_SITES"][siteID]["SITE_NAME"];
+            $("#description").innerText = dB["WATER_SITES"][siteID]["SITE_DESC"];
+        }
+        if (siteID in dB["EVENT_SITES"]) {
+            for (let annotation of dB["EVENT_SITES"][siteID]) {
+                let evt_id = annotation["EVT_ID"];
+                // FIXME: Each object in the dB["EVENT_SITES"][siteID] array should contain the event's id.
+                evt_id = 0;
+                // FIXME: HISTORICAL_EVENTS should be an object containing objects, not an array. Then each can be identified and accessed by its id.
+                let info = dB["HISTORICAL_EVENTS"][evt_id];
+                console.log(info)
+                addBoxAnnotation(info);
+                myGraph.update();
+            }
         }
     }
+    toggleLoader();
 }
 
 async function queryAPI(office, name) {
@@ -205,7 +209,7 @@ function parseData(data) {
         let obj = { label, data: values, hidden: false };
         datasets.push(obj);
     } else if (intervalRegularity == "irregular-interval-values") {
-
+        // TODO: irregular interval graphing
     }
 
     // if (data["sourceInfo"]["siteName"]) {
