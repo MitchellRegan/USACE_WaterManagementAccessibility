@@ -5,7 +5,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ff3d00;
+  background-color: #003dff;
   border-radius: 50%;
   box-shadow: 0 0 30px 4px rgba(0, 0, 0, 0.5) inset,
     0 5px 12px rgba(0, 0, 0, 0.15);
