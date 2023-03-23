@@ -22,8 +22,8 @@ async function graphTimeSeries(elem) {
     res = res["time-series"];
 
     if (res["time-series"].length == 0) console.error("No Data!");
-    if (res["time-series"].length > 1) console.error("Too much data?");
-    if (res["time-series"][0].error) console.error(res["time-series"][0].error);
+    else if (res["time-series"].length > 1) console.error("Too much data?");
+    else if (res["time-series"][0].error) console.error(res["time-series"][0].error);
 
     else {
         const ctx = $('#myChart');
