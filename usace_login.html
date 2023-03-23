@@ -24,6 +24,14 @@
             signInOptions: [
                 // Leave the lines as is for the providers you want to offer your users.
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID
+                
+                //These are other available options that we aren't currently using
+                //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                //firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                //firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                //firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+                //firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
             ]
         };
         
@@ -49,7 +57,7 @@
 <body>
     <div style="align-self:center; width:400px">
         <h1>USACE Login</h1>
-        <p>Please login to access the event creation screen.</p>
+        <p>Please login to access the event creation screen, or go back to the <a href="index.html">Homepage.</a></p>
         <div id="firebaseui-auth-container"></div>
     </div>
 </body>
