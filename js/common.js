@@ -1,4 +1,24 @@
 /**
+ * Constants
+ */
+const PUBLIC_NAME = "public-name";
+const LONG_NAME = "long-name";
+const CODE_NAME = "name";
+const NEAREST_CITY = "nearest-city";
+
+const SEARCH_RESULTS = "#searchResults";
+const TIME_SERIES = "#timeSeries";
+
+const NAME_SEARCH = "#nameSearch";
+const CITY_SEARCH = "#citySearch";
+const COUNTY_SEARCH = "#countySearch";
+
+const LOADER = ".loader";
+const COVER = ".cover";
+
+let SELECTED_LOCATION;
+
+/**
  * A shortened and more convenient version of document.querySelectorAll() and document.querySelector()
  * @param {String} query A CSS Selector
  * @returns An array of elements or a single element
@@ -27,22 +47,20 @@ fetchNameMeta();
  * 
  * Also sorts the data (by state) into a window namespaced variable: `window.states`.
  * @TODO: Ignore special chars [. , etc.]
+ * @TODO: Split on space and find all matches
  */
-function search(id = "#results") {
-    let query = new RegExp($('#search').value, "i");
+function search() {
+    let query = new RegExp($('#nameSearch').value, "i");
     let count = 0;
-    $(id).innerHTML = "";
+    $(SEARCH_RESULTS).innerHTML = "";
+    $(TIME_SERIES).innerHTML = "";
+    if ($(NAME_SEARCH).value=="" && $(CITY_SEARCH).value=="" && $(COUNTY_SEARCH).value=="") return;
     for (let letter of Object.getOwnPropertyNames(window["names"])) {
         for (let curr of window["names"][letter]) {
-            if ((curr["public-name"] && curr["public-name"].match(query) != null)
-                || (curr["long-name"] && curr["long-name"].match(query) != null)
-                || (curr["description"] && curr["description"].match(query) != null)
-                || (curr["map-label"] && curr["map-label"].match(query) != null
-                    || (curr["name"] && curr["name"].match(query) != null))
-            ) {
+            if (matchName(curr, query) && matchCity(curr) && matchCounty(curr)) {
                 count++;
-                craftResult(curr, id);
-                if (count > ($("#numResults").value || 20)) return;
+                craftResult(curr);
+                if (count >= 5) return;
             }
             if (curr["state"] != undefined) {
                 let state = curr["state"];
@@ -54,6 +72,30 @@ function search(id = "#results") {
     }
 }
 
+function matchName(option, query) {
+    let public = option[PUBLIC_NAME] && option[PUBLIC_NAME].match(query) != null;
+    let long = option[LONG_NAME] && option[LONG_NAME].match(query) != null;
+    let name = option[CODE_NAME] && option[CODE_NAME].match(query) != null;
+
+    if (name == undefined) return false;
+
+    return public || long || name;
+}
+
+function matchCity(option) {
+    if ($(CITY_SEARCH).value == "") return true;
+    if (!Object.getOwnPropertyNames(option).includes(NEAREST_CITY)) return false;
+    let city = new RegExp($(CITY_SEARCH).value, "i");
+    return option[NEAREST_CITY].match(city) != null;
+}
+
+function matchCounty(option) {
+    if ($(COUNTY_SEARCH).value == "") return true;
+    if (!Object.getOwnPropertyNames(option).includes("county")) return false;
+    let county = new RegExp($(COUNTY_SEARCH).value, "i");
+    return option["county"].match(county) != null;
+}
+
 /**
  * Crafts a summary card for the provided location's metadata.
  * The card includes various meta fields, a link to view the coordinates on Google Maps, and a button to find related TimeSeries.  
@@ -62,27 +104,30 @@ function search(id = "#results") {
  * 
  * *This should really only be called by the {@link search()} function.*  
  * @param {JSON} metaData The metadata of a specific water location.
- * @param {String} id A CSS ID indicating where the results should be added.
  * @private
  * @TODO: Lots of undefineds and some weird formatting
  */
-function craftResult(metaData, id) {
-    // console.log(metaData);
+function craftResult(metaData) {
     let result = document.createElement('div');
     result.innerHTML = `
-        <h3>${metaData["public-name"] || metaData["long-name"]}</h3>
-        <p>${metaData["nearest-city"] || ""}</p>
-        <p>${metaData["county"] || ""} County</p>
-        <p>${metaData["description"] || ""}</p>
-        <p>${metaData["map-label"] || ""}</p>
-        <p>${metaData["name"] || ""}</p>
-        <a target="blank" href="https://www.google.com/maps/search/?api=1&query=${metaData["latitude"]},${metaData["longitude"]}">View on Map</a>
-        <button onclick="findTimeSeries(this.parentElement)">Find Timeseries!</button>
+        <p>${metaData[PUBLIC_NAME] || metaData["long-name"] || metaData["name"]}</p>
+        <p>${metaData[NEAREST_CITY] || ""}</p>
+        <p>${metaData["county"] && metaData["county"] != "Unknown County or County N/A" ? metaData["county"] + " County" : ""}</p>
+        <hr>
     `;
     result.dataset.name = metaData["name"];
     result.dataset.office = metaData["office"];
-    result.classList.add("result");
-    $(id).appendChild(result);
+    result.dataset.meta = JSON.stringify(metaData);
+    result.classList.add("searchResult");
+    result.onclick = autoFill;
+    $(SEARCH_RESULTS).appendChild(result);
+}
+
+function autoFill() {
+    let metaData = JSON.parse(this.dataset.meta);
+    $(NAME_SEARCH).value = metaData[PUBLIC_NAME];
+    $(SEARCH_RESULTS).innerHTML = "";
+    SELECTED_LOCATION = metaData;
 }
 
 /**
@@ -90,23 +135,23 @@ function craftResult(metaData, id) {
  * It will present the user with a list similar to the list created by {@link search()}.
  * ***This is only initiated by pressing on the `Find Timeseries!` button on a summary card!***
  * @param {HTMLElement} elem The element whose `Find Timeseries!` button was pressed.
- * @param {String} id A CSS ID indicating where the selectors should be added.
  * @async
  */
-async function findTimeSeries(elem, id = "#timeSeries") {
+async function findTimeSeries() {
+    if (!SELECTED_LOCATION) return;
     toggleLoader();
-    $(id).innerHTML = "";
-    console.log(elem.dataset.name, elem.dataset.office);
-    let office = elem.dataset.office;
-    let name = elem.dataset.name;
+    $(TIME_SERIES).innerHTML = "";
+    // console.log(elem.dataset.name, elem.dataset.office);
+    let office = SELECTED_LOCATION.office;
+    let name = SELECTED_LOCATION.name;
     const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/catalog/timeseries?office=${office}&like=${encodeURIComponent(name)}%5C.`);
     const res = await fetch(query);
     const json = await res.json();
     for (let timeSeries of json.entries) {
-        craftTimeSeriesSelector(timeSeries, id);
+        craftTimeSeriesSelector(timeSeries);
     }
     if (json.entries.length == 0) {
-        $(id).innerHTML = "<h3>No Time Series Found :(</h3>";
+        $(TIME_SERIES).innerHTML = "<h3>No Time Series Found :(</h3>";
     }
     toggleLoader();
 }
@@ -118,28 +163,27 @@ async function findTimeSeries(elem, id = "#timeSeries") {
  * 
  * *This should really only be called by the {@link findTimeSeries()} function.*  
  * @param {JSON} metaData The metadata of a specific timeseries.
- * @param {String} id A CSS ID indicating where the selectors should be added.
  * @private
  */
-function craftTimeSeriesSelector(metaData, id) {
+function craftTimeSeriesSelector(metaData) {
     let result = document.createElement('div');
     result.innerHTML = `
-        <h3>${metaData.name}</h3>
+        <h3>${metaData.name.split(".")[1]}</h3>
         <p>Measuring Interval: ${metaData.interval}</p>
         <p>Recording Unit: ${metaData.units}</p>
         <button onclick="graphTimeSeries(this.parentElement)">Graph Timeseries!</button>
     `;
     result.dataset.json = JSON.stringify(metaData);
     result.classList.add("result");
-    $(id).appendChild(result);
+    $(TIME_SERIES).appendChild(result);
 }
 
 function toggleLoader() {
-    if ($(".loader")[0].style.display == "block") {
-        $(".cover")[0].style.display = "none";
-        $(".loader")[0].style.display = "none";
+    if ($(LOADER)[0].style.display == "block") {
+        $(COVER)[0].style.display = "none";
+        $(LOADER)[0].style.display = "none";
     } else {
-        $(".cover")[0].style.display = "block";
-        $(".loader")[0].style.display = "block";
+        $(COVER)[0].style.display = "block";
+        $(LOADER)[0].style.display = "block";
     }
 }
