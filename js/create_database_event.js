@@ -20,8 +20,12 @@ function findSiteOptions(inputText){
 * Function to check for any potential errors or malicious code injection with the user-given inputs.
 * Returns True if all checks are valid.
 */
-function validateData(title, desc, sites, sDate, eDate, img){
+function validateData(email, title, desc, sites, sDate, eDate, img){
     //Checking for empty input fields for required data
+    if(email == ''){
+        alert("You do not appear to be signed in.");
+        return false;
+    }
     if(title == ''){
         alert("Please provide a title for this event.");
         return false;
@@ -68,9 +72,9 @@ function clearInputFields(){
 /**
 * Function called from create_event.html on form submission.
 */
-async function writeDatabaseEvt(title, desc, sites, startDate, endDate, timezone, img){
+async function writeDatabaseEvt(email, title, desc, sites, startDate, endDate, timezone, img){
     //Validating the inputs first
-    if(!validateData(title, desc, sites, startDate, endDate, img)){
+    if(!validateData(email, title, desc, sites, startDate, endDate, img)){
         return;
     }
     
@@ -93,6 +97,7 @@ async function writeDatabaseEvt(title, desc, sites, startDate, endDate, timezone
     }
     
     let evtjson = {
+        "EMAIL":email,
         "EVT_TITLE":title,
         "EVT_DESC":desc,
         "EVT_ENDDATE":evtEnd,
@@ -109,8 +114,13 @@ async function writeDatabaseEvt(title, desc, sites, startDate, endDate, timezone
     })
     .then(response => response.json())
     .then(data => {
-        clearInputFields();
-        alert("Event " + title + " has been created and uploaded to the database.");
+        if(data.hasOwnProperty('error')){
+            alert(data.error);
+        }
+        else{
+            clearInputFields();
+            alert("Event " + title + " has been created and uploaded to the database.");
+        }
     })
     .catch(e => {
         console.error(e);
