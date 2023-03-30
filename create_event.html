@@ -68,6 +68,13 @@
         window.addEventListener('load', function() {
             initApp()
         });
+        
+        logUserOut = function(){
+            firebase.auth().signOut().then(() => {
+                console.log("signing out...");
+                window.location.href = './usace_login.html';
+            });
+        };
     </script>
 </head>
     
@@ -150,10 +157,10 @@
     
     <div style="margin-left:auto; margin-right:auto; text-align:center; min-width: 400px;">
         <h1>New Historical Event</h1>
-        <p>This page is for creating a new historical event to show up on the water data graphs.</p>
+        <p>This page is for creating a new historical event to show up on the water data graphs. Click <a onclick="logUserOut()">here</a> to sign out.</p>
         
         <div id="signedOut">
-            <p>You are not signed in. Please click <a href="usace_login.html">here</a> to sign-in to your U.S.A.C.E. account in order to access this page.</p>
+            <p>You are not signed in. Please click <a href="./usace_login.html">here</a> to sign-in to your U.S.A.C.E. account in order to access this page.</p>
         </div>
         
         <div id="invalidUser">
@@ -161,78 +168,92 @@
         </div>
     </div>
     
-    <div id="signedIn" style="margin-left:auto; margin-right:auto; min-width: 400px; max-width:800px;">
-        <form id="evtForm">
-            <label for="email">Signed in as:</label>
-            <input type="text" id="email" readonly=false><br><br>
+    <div id="signedIn" style="margin-left:auto; margin-right:auto; min-width: 400px;">
+        <form id="evtForm" style="display:flex; flex-direction:row; justify-content:space-around; margin-left:auto; margin-right:auto;">
+            <div id="leftForm" style="min-width:400px;">
+                <label for="email">Signed in as:</label><br>
+                <input type="text" id="email" style="width:100%;" readonly=false><br><br>
 
-            <label for="evtTitle" style=".requiredText">Event Title<i class="requiredText">*</i>:</label>
-            <input type="text" id="evtTitle" name="evtTitle" required=True><br><br>
+                <label for="evtTitle" style=".requiredText">Event Title<i class="requiredText">*</i>:</label><br>
+                <input type="text" id="evtTitle" name="evtTitle" style="width:100%" required=True><br><br>
 
-            <label for="evtDesc">Event Description<i class="requiredText">*</i>:</label><br>
-            <textarea id="evtDesc" name="evtDesc" required=True form="evtForm" rows=4 cols=40></textarea><br><br>
+                <label for="evtDesc">Event Description<i class="requiredText">*</i>:</label><br>
+                <textarea id="evtDesc" name="evtDesc" required=True form="evtForm" rows=4 cols=40 style="width:100%"></textarea><br><br>
 
-            <label for="siteSearch">Affected Water Sites<i class="requiredText">*</i>:</label>
-            <input type="search" id="siteSearch" name="siteSearch" placeholder="Search Water Sites" list="siteList" required=True onchange="findSiteOptions(document.getElementById('siteSearch').value)"><br>
-            <datalist id="siteList"></datalist><br>
+                <label for="evtImg">Image URL:</label><br>
+                <input type="url" id="evtImg" name="evtImg" style="width:100%"><br><br>
 
-            <label for="evtStart">Start Date<i class="requiredText">*</i>:</label>
-            <input type="datetime-local" id="evtStart" name="evtStart" required=True><br>
-            <label for="evtEnd">End Date<i class="requiredText">*</i>: </label>
-            <input type="datetime-local" id="evtEnd" name="evtEnd" required=True><br>
+                <label for="evtStart">Start Date<i class="requiredText">*</i>:</label>
+                <input type="datetime-local" id="evtStart" name="evtStart" required=True><br>
+                <label for="evtEnd">End Date<i class="requiredText">*</i>: </label>
+                <input type="datetime-local" id="evtEnd" name="evtEnd" required=True><br>
 
-            <!-- Taken from https://gist.github.com/nodesocket/3919205 -->
-            <label for="evtTZ">Timezone:</label>
-            <select name="evtTZ" id="evtTZ">
-                <option value=-12>(GMT -12:00) Eniwetok, Kwajalein</option>
-                <option value=-11>(GMT -11:00) Midway Island, Samoa</option>
-                <option value=-10>(GMT -10:00) Hawaii</option>
-                <option value=-9.5>(GMT -9:30) Taiohae</option>
-                <option value=-9>(GMT -9:00) Alaska</option>
-                <option value=-8>(GMT -8:00) Pacific Time (US &amp; Canada)</option>
-                <option value=-7>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
-                <option value=-6 selected="selected">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
-                <option value=-5>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-                <option value=-4.5>(GMT -4:30) Caracas</option>
-                <option value=-4>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
-                <option value=-3.5>(GMT -3:30) Newfoundland</option>
-                <option value=-3>(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
-                <option value=-2>(GMT -2:00) Mid-Atlantic</option>
-                <option value=-1>(GMT -1:00) Azores, Cape Verde Islands</option>
-                <option value=0>(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
-                <option value=1>(GMT +1:00) Brussels, Copenhagen, Madrid, Paris</option>
-                <option value=2>(GMT +2:00) Kaliningrad, South Africa</option>
-                <option value=3>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
-                <option value=3.5>(GMT +3:30) Tehran</option>
-                <option value=4>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-                <option value=4.5>(GMT +4:30) Kabul</option>
-                <option value=5>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-                <option value=5.5>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-                <option value=5.75>(GMT +5:45) Kathmandu, Pokhara</option>
-                <option value=6>(GMT +6:00) Almaty, Dhaka, Colombo</option>
-                <option value=6.5>(GMT +6:30) Yangon, Mandalay</option>
-                <option value=7>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
-                <option value=8>(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
-                <option value=8.75>(GMT +8:45) Eucla</option>
-                <option value=9>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-                <option value=9.5>(GMT +9:30) Adelaide, Darwin</option>
-                <option value=10>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
-                <option value=10.5>(GMT +10:30) Lord Howe Island</option>
-                <option value=11>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
-                <option value=11.5>(GMT +11:30) Norfolk Island</option>
-                <option value=12>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
-                <option value=12.75>(GMT +12:45) Chatham Islands</option>
-                <option value=13>(GMT +13:00) Apia, Nukualofa</option>
-                <option value=14>(GMT +14:00) Line Islands, Tokelau</option>
-            </select><br><br>
-
-            <label for="evtImg">Image URL:</label>
-            <input type="url" id="evtImg" name="evtImg"><br><br>
-            <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
+                <!-- Taken from https://gist.github.com/nodesocket/3919205 -->
+                <label for="evtTZ">Timezone:</label>
+                <select name="evtTZ" id="evtTZ">
+                    <option value=-12>(GMT -12:00) Eniwetok, Kwajalein</option>
+                    <option value=-11>(GMT -11:00) Midway Island, Samoa</option>
+                    <option value=-10>(GMT -10:00) Hawaii</option>
+                    <option value=-9.5>(GMT -9:30) Taiohae</option>
+                    <option value=-9>(GMT -9:00) Alaska</option>
+                    <option value=-8>(GMT -8:00) Pacific Time (US &amp; Canada)</option>
+                    <option value=-7>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+                    <option value=-6 selected="selected">(GMT -6:00) Central Time (US &amp; Canada)</option>
+                    <option value=-5>(GMT -5:00) Eastern Time (US &amp; Canada)</option>
+                    <option value=-4.5>(GMT -4:30) Caracas</option>
+                    <option value=-4>(GMT -4:00) Atlantic Time (Canada)</option>
+                    <option value=-3.5>(GMT -3:30) Newfoundland</option>
+                    <option value=-3>(GMT -3:00) Brazil, Buenos Aires</option>
+                    <option value=-2>(GMT -2:00) Mid-Atlantic</option>
+                    <option value=-1>(GMT -1:00) Cape Verde Islands</option>
+                    <option value=0>(GMT) Western Europe Time</option>
+                    <option value=1>(GMT +1:00) Brussels, Madrid, Paris</option>
+                    <option value=2>(GMT +2:00) Kaliningrad, South Africa</option>
+                    <option value=3>(GMT +3:00) Baghdad, Riyadh, Moscow</option>
+                    <option value=3.5>(GMT +3:30) Tehran</option>
+                    <option value=4>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+                    <option value=4.5>(GMT +4:30) Kabul</option>
+                    <option value=5>(GMT +5:00) Islamabad, Karachi</option>
+                    <option value=5.5>(GMT +5:30) Bombay, Calcutta, New Delhi</option>
+                    <option value=5.75>(GMT +5:45) Kathmandu, Pokhara</option>
+                    <option value=6>(GMT +6:00) Almaty, Dhaka, Colombo</option>
+                    <option value=6.5>(GMT +6:30) Yangon, Mandalay</option>
+                    <option value=7>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+                    <option value=8>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
+                    <option value=8.75>(GMT +8:45) Eucla</option>
+                    <option value=9>(GMT +9:00) Tokyo, Seoul, Osaka</option>
+                    <option value=9.5>(GMT +9:30) Adelaide, Darwin</option>
+                    <option value=10>(GMT +10:00) Eastern Australia, Guam</option>
+                    <option value=10.5>(GMT +10:30) Lord Howe Island</option>
+                    <option value=11>(GMT +11:00) Magadan, Solomon Islands</option>
+                    <option value=11.5>(GMT +11:30) Norfolk Island</option>
+                    <option value=12>(GMT +12:00) Auckland, Fiji</option>
+                    <option value=12.75>(GMT +12:45) Chatham Islands</option>
+                    <option value=13>(GMT +13:00) Apia, Nukualofa</option>
+                    <option value=14>(GMT +14:00) Line Islands</option>
+                </select><br><br>
+                <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
+            </div>
+            
+            <div id="rightForm" style="min-width:400px;">
+                <label for="nameSearch">Affected Water Sites<i class="requiredText">*</i>:</label>
+                <div id="" class="fade collapse in">
+                    <label for="nameSearch">Search:</label>
+                    <input id="nameSearch" type="text" onkeyup="search()" placeholder="Site Name" />
+                    <label for="citySearch" style="display:none;">City:</label>
+                    <input id="citySearch" type="text" onkeyup="search()" placeholder="City Name" style="display:none;"/>
+                    <label for="countySearch" style="display:none;">County:</label>
+                    <input id="countySearch" type="text" onkeyup="search()" placeholder="County Name" style="display:none;"/>
+                    <button type="button" onclick="addSiteToList()">Add To List</button>
+                    <div id="searchResults" class="listContainer"></div>
+                </div>
+                <ul id="addedSites"></ul>
+            </div>
         </form>
-        <button onclick="writeDatabaseEvt(document.getElementById('email').value, document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('siteSearch').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)" style="margin: 0 auto">Submit</button>
-        <p><i class="requiredText" style="margin:auto">*</i> indicates required fields</p>
-        
+        <div style="text-align:center; margin-bottom:80px;">
+            <button type="submit" onclick="writeDatabaseEvt(document.getElementById('email').value, document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)" style="margin-left:auto; margin-right:auto;">Submit</button>
+            <p style="margin-left:auto; margin-right:auto;"><i class="requiredText" style="margin:auto">*</i> indicates required fields</p>
+        </div>
         <!--button onclick="testWriteDb(document.getElementById('evtDesc').value)">TEST</button-->
     </div>
     

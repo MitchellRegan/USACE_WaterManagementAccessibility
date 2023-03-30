@@ -52,8 +52,13 @@ fetchNameMeta();
 function search() {
     let query = new RegExp($('#nameSearch').value, "i");
     let count = 0;
-    $(SEARCH_RESULTS).innerHTML = "";
-    $(TIME_SERIES).innerHTML = "";
+    try{
+        $(SEARCH_RESULTS).innerHTML = "";
+        $(TIME_SERIES).innerHTML = "";
+    }
+    catch(e){
+        console.log(e);
+    }
     if ($(NAME_SEARCH).value=="" && $(CITY_SEARCH).value=="" && $(COUNTY_SEARCH).value=="") return;
     for (let letter of Object.getOwnPropertyNames(window["names"])) {
         for (let curr of window["names"][letter]) {

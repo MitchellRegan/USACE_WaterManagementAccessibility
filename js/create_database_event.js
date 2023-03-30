@@ -2,17 +2,38 @@
 * Called from create_event.html when the user types in the siteSearch input field.
 * Fills the siteList datalist with valid water site options based on their input.
 */
-function findSiteOptions(inputText){
-    console.log("Looking for " + inputText);
-    var siteResults = document.querySelectorAll(inputText);
-    console.log("Results:" + siteResults.length);
-    var list = document.getElementById('siteList');
+function addSiteToList(){
+    //Get the site name from the input field
+    let name = document.getElementById("nameSearch").value;
+    console.log(name);
+    //Check if the site is valid
+        //If not, show error message below search, and return
+    
+    //Finding the number of elements already in the "addedSites" list
+    let p = document.getElementById("addedSites");
+    
+    //Creating a text element to display the newly added location name
+    let liElement = document.createElement("li");
+    
+    let siteDiv = document.createElement("div");
+    liElement.appendChild(siteDiv);
+    
+    let nameText = document.createTextNode(name + "\t\t");
+    let xButton = document.createElement("button");
+    let xText = document.createTextNode("X");
+    xButton.onclick = removeSiteFromList;
+    xButton.type = "button";
+    siteDiv.appendChild(nameText);
+    siteDiv.appendChild(xButton);
+    xButton.appendChild(xText);
+    
+    //Parenting the new location name to the "addedSites" unordered list
+    p.appendChild(liElement);
+}
 
-    siteResults.forEach(function(item){
-        var option = document.createElement('option');
-        option.value = item;
-        list.appendChild(option);
-    });
+
+function removeSiteFromList(index){
+    console.log("Removing " + index.pointerId);
 }
 
 
@@ -20,7 +41,7 @@ function findSiteOptions(inputText){
 * Function to check for any potential errors or malicious code injection with the user-given inputs.
 * Returns True if all checks are valid.
 */
-function validateData(email, title, desc, sites, sDate, eDate, img){
+function validateData(email, title, desc, sDate, eDate, img){
     //Checking for empty input fields for required data
     if(email == ''){
         alert("You do not appear to be signed in.");
@@ -34,17 +55,18 @@ function validateData(email, title, desc, sites, sDate, eDate, img){
         alert("Please provide a description for the event.");
         return false;
     }
-    if(sites == ''){
-        alert("Please provide at least one water site that was affected by this event.");
-        return false;
-    }
     if(sDate == '' || eDate == ''){
         alert("Please provide a starting date and ending date for when this event occurred.");
         return false;
     }
     
+    if(document.getElementById('addedSites').children.length == 0){
+        alert("Please enter at least one water site that was affected by this historical event.");
+        return false;
+    }
+    
     //Preventing JSON injection
-    var combinedStr = "" + title + desc + sites + sDate + eDate + img;
+    var combinedStr = "" + title + desc + sDate + eDate + img;
     if(combinedStr.includes('{') || combinedStr.includes('}')){
         alert("The characters '{' and '}' are not allowed.");
         return false;
@@ -61,20 +83,23 @@ function validateData(email, title, desc, sites, sDate, eDate, img){
 function clearInputFields(){
     document.getElementById('evtTitle').value = '';
     document.getElementById('evtDesc').value = '';
-    document.getElementById('siteSearch').value = '';
     document.getElementById('evtStart').value = '';
     document.getElementById('evtEnd').value = '';
     document.getElementById('evtTZ').value = '';
     document.getElementById('evtImg').value = '';
+    
+    while(document.getElementById('addedSites').children.length > 0){
+        document.getElementById('addedSites').children[0].remove();
+    }
 }
 
 
 /**
 * Function called from create_event.html on form submission.
 */
-async function writeDatabaseEvt(email, title, desc, sites, startDate, endDate, timezone, img){
+async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone, img){
     //Validating the inputs first
-    if(!validateData(email, title, desc, sites, startDate, endDate, img)){
+    if(!validateData(email, title, desc, startDate, endDate, img)){
         return;
     }
     
