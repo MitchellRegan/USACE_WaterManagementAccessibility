@@ -170,7 +170,7 @@
     
     <div id="signedIn" style="margin-left:auto; margin-right:auto; min-width: 400px;">
         <form id="evtForm" style="display:flex; flex-direction:row; justify-content:center; margin-left:auto; margin-right:auto;">
-            <div id="leftForm" style="min-width:400px;margin-right:20px;">
+            <div id="leftForm">
                 <label for="email">Signed in as:</label><br>
                 <input type="text" id="email" style="width:100%;" readonly=false><br><br>
 
@@ -235,7 +235,7 @@
                 <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
             </div>
             
-            <div id="rightForm" style="min-width:400px;margin-left:20px;">
+            <div id="rightForm">
                 <label for="nameSearch">Affected Water Sites<i class="requiredText">*</i>:</label>
                 <div id="" class="fade collapse in">
                     <label for="nameSearch">Search:</label>
@@ -251,7 +251,7 @@
                 <ul id="addedSites"></ul>
             </div>
         </form>
-        <div style="text-align:center; margin-bottom:30px;">
+        <div id="bottomForm">
             <button type="submit" onclick="writeDatabaseEvt(document.getElementById('email').value, document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)" style="margin-left:auto; margin-right:auto;">Submit</button>
             <p style="margin-left:auto; margin-right:auto;"><i class="requiredText" style="margin:auto">*</i> indicates required fields</p>
         </div>
