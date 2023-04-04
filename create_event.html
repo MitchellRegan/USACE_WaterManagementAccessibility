@@ -169,8 +169,8 @@
     </div>
     
     <div id="signedIn" style="margin-left:auto; margin-right:auto; min-width: 400px;">
-        <form id="evtForm" style="display:flex; flex-direction:row; justify-content:space-around; margin-left:auto; margin-right:auto;">
-            <div id="leftForm" style="min-width:400px;">
+        <form id="evtForm" style="display:flex; flex-direction:row; justify-content:center; margin-left:auto; margin-right:auto;">
+            <div id="leftForm" style="min-width:400px;margin-right:20px;">
                 <label for="email">Signed in as:</label><br>
                 <input type="text" id="email" style="width:100%;" readonly=false><br><br>
 
@@ -235,7 +235,7 @@
                 <!--input type="submit" value="Submit" onPress="writeDatabaseEvt($('#evtTitle').value, $('#evtDesc').value, $('#evtStart').value, $('#evtEnd').value, $('#evtImg').value)"-->
             </div>
             
-            <div id="rightForm" style="min-width:400px;">
+            <div id="rightForm" style="min-width:400px;margin-left:20px;">
                 <label for="nameSearch">Affected Water Sites<i class="requiredText">*</i>:</label>
                 <div id="" class="fade collapse in">
                     <label for="nameSearch">Search:</label>
@@ -247,36 +247,35 @@
                     <button type="button" onclick="addSiteToList()">Add To List</button>
                     <div id="searchResults" class="listContainer"></div>
                 </div>
+                <p id="invalidSiteName" style="text-align: center; display:none;"><i class="requiredText" style="margin:auto">Please enter a valid location name</i></p>
                 <ul id="addedSites"></ul>
             </div>
         </form>
-        <div style="text-align:center; margin-bottom:80px;">
+        <div style="text-align:center; margin-bottom:30px;">
             <button type="submit" onclick="writeDatabaseEvt(document.getElementById('email').value, document.getElementById('evtTitle').value, document.getElementById('evtDesc').value, document.getElementById('evtStart').value, document.getElementById('evtEnd').value, document.getElementById('evtTZ').value, document.getElementById('evtImg').value)" style="margin-left:auto; margin-right:auto;">Submit</button>
             <p style="margin-left:auto; margin-right:auto;"><i class="requiredText" style="margin:auto">*</i> indicates required fields</p>
         </div>
         <!--button onclick="testWriteDb(document.getElementById('evtDesc').value)">TEST</button-->
     </div>
     
-    <footer style="background-color:#617378">
-        <section class="container-fluid footer">
-          <div class="row-fluid footer_links">
-            <div class="col-md-1"><a id="aboutFooter" class="footer_link" style="color: white; cursor: pointer;">About Us</a></div>
-            <div class="col-md-1"><a id="legalFooter" class="footer_link" style="color: white; cursor: pointer;">Legal</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/Accessibility.aspx">Accessibility</a></div>
-            <div class="col-md-1"><a style="color: white; cursor: pointer;" href="mailto:water@usace.army.mil">Contact Us</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/FOIA.aspx">FOIA</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/InformationQualityAct.aspx">Information Quality Act</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/LinkDisclaimer.aspx">Link Disclaimer</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://prhome.defense.gov/nofear">No Fear Act</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/PrivacyandSecurity.aspx">Privacy &amp; Security</a></div>
-            <div class="col-md-1"><a style="color: white; cursor: pointer;" href="mailto:Bryan.R.Armbrust@usace.army.mil">Public Inquiries</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/SiteMap.aspx">Site Map</a></div>
-            <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="https://www.usa.gov/">USA.gov</a></div>
-          </div>
-          <div class="row-fluid">
-            <div class="col-md-12 footer_copyright">? 2018	|United States Army Corp of Engineers. All Rights Reserved.</div>
-          </div>
-        </section>
-    </footer>
+    <section class="container-fluid footer">
+      <div class="row-fluid footer_links">
+        <div class="col-md-1"><a id="aboutFooter" class="footer_link" style="color: white; cursor: pointer;">About Us</a></div>
+        <div class="col-md-1"><a id="legalFooter" class="footer_link" style="color: white; cursor: pointer;">Legal</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/Accessibility.aspx">Accessibility</a></div>
+        <div class="col-md-1"><a style="color: white; cursor: pointer;" href="mailto:water@usace.army.mil">Contact Us</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/FOIA.aspx">FOIA</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/InformationQualityAct.aspx">Information Quality Act</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/LinkDisclaimer.aspx">Link Disclaimer</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://prhome.defense.gov/nofear">No Fear Act</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/PrivacyandSecurity.aspx">Privacy &amp; Security</a></div>
+        <div class="col-md-1"><a style="color: white; cursor: pointer;" href="mailto:Bryan.R.Armbrust@usace.army.mil">Public Inquiries</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/SiteMap.aspx">Site Map</a></div>
+        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="https://www.usa.gov/">USA.gov</a></div>
+      </div>
+      <div class="row-fluid">
+        <div class="col-md-12 footer_copyright">? 2018	|United States Army Corp of Engineers. All Rights Reserved.</div>
+      </div>
+    </section>
 </body>
 </html>
