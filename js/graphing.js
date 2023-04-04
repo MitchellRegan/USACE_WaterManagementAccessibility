@@ -3,6 +3,19 @@ let myGraph;
 let GRAPHING = false;
 let MIN_MAX_TIME = [];
 
+window.addEventListener('load', () => {
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  
+    /* remove second/millisecond if needed - credit ref. https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time#comment112871765_60884408 */
+    now.setMilliseconds(null)
+    now.setSeconds(null)
+  
+    $("#endDate").value = now.toISOString().slice(0, -1);
+    now.setDate(now.getDate()-1);
+    $("#startDate").value = now.toISOString().slice(0, -1);
+  });
+
 async function graphTimeSeries(elem) {
     if (GRAPHING) return;
     GRAPHING = true;
@@ -52,7 +65,10 @@ async function graphTimeSeries(elem) {
 }
 
 async function queryAPI(office, name) {
-    const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/timeseries?office=${office}&name=${encodeURIComponent(name)}&begin=PT-${24}h`);
+    let startDate = $("#startDate").value;
+    let endDate = $("#endDate").value;
+
+    const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/timeseries?office=${office}&name=${encodeURIComponent(name)}&begin=${startDate}&end=${endDate}`);
     const res = await fetch(query);
     let data = await res.json();
     return data;
@@ -120,6 +136,10 @@ function makeGraph(ctx, labels, datasets) {
                 min: MIN_MAX_TIME[0],
                 max: MIN_MAX_TIME[1],
                 type: 'time',
+                title: {
+                    display: true,
+                    text: 'Date/Time',
+                },
                 time: {
                     unit: 'hour',
                     displayFormats: {

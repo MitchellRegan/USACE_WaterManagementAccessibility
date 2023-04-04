@@ -126,6 +126,10 @@
                 <input id="citySearch" type="text" onkeyup="search()" placeholder="City Name" />
                 <label for="countySearch">County:</label>
                 <input id="countySearch" type="text" onkeyup="search()" placeholder="County Name" />
+                <label for="startDate">Start Date:</label>
+                <input type="datetime-local" id="startDate" name="startDate">
+                <label for="endDate">End Date:</label>
+                <input type="datetime-local" id="endDate" name="endDate">
                 <button onclick="findTimeSeries()">Search!</button>
                 <div id="searchResults" class="listContainer"></div>
             </div>

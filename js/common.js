@@ -171,6 +171,11 @@ async function findTimeSeries() {
  * @private
  */
 function craftTimeSeriesSelector(metaData) {
+    // I thought extents would let me know the times of recordings but it doesn't. I have no idea what it is, but things without it don't tend to work so I'll keep this filter.
+    if (metaData.extents.length == 0) return;
+    // if (new Date($("#startDate").value) > new Date(metaData.extents[0]["latest-time"]) || new Date($("#endDate").value) < new Date(metaData.extents[0]["earliest-time"])) return;
+
+    console.log(metaData);
     let result = document.createElement('div');
     result.innerHTML = `
         <h3>${metaData.name.split(".")[1]}</h3>
