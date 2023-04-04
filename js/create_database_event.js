@@ -5,9 +5,16 @@
 function addSiteToList(){
     //Get the site name from the input field
     let name = document.getElementById("nameSearch").value;
-    console.log(name);
+    
     //Check if the site is valid
-        //If not, show error message below search, and return
+    if(name == ''){
+        document.getElementById("invalidSiteName").style.display = "block";
+        return;
+    }
+    else{
+        document.getElementById("invalidSiteName").style.display = "none";
+        document.getElementById("nameSearch").value = "";
+    }
     
     //Finding the number of elements already in the "addedSites" list
     let p = document.getElementById("addedSites");
@@ -41,7 +48,7 @@ function removeSiteFromList(index){
 * Function to check for any potential errors or malicious code injection with the user-given inputs.
 * Returns True if all checks are valid.
 */
-function validateData(email, title, desc, sDate, eDate, img){
+function validateData(email, title, desc, sDate, eDate, img, sites){
     //Checking for empty input fields for required data
     if(email == ''){
         alert("You do not appear to be signed in.");
@@ -59,14 +66,16 @@ function validateData(email, title, desc, sDate, eDate, img){
         alert("Please provide a starting date and ending date for when this event occurred.");
         return false;
     }
-    
-    if(document.getElementById('addedSites').children.length == 0){
+    if(sites.length == 0){
         alert("Please enter at least one water site that was affected by this historical event.");
         return false;
     }
     
     //Preventing JSON injection
     var combinedStr = "" + title + desc + sDate + eDate + img;
+    for(var i = 0; i < sites.length; i++){
+        combinedStr += sites[i];
+    }
     if(combinedStr.includes('{') || combinedStr.includes('}')){
         alert("The characters '{' and '}' are not allowed.");
         return false;
@@ -98,8 +107,16 @@ function clearInputFields(){
 * Function called from create_event.html on form submission.
 */
 async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone, img){
+    //Getting the list of water sites
+    let sites = [];
+    for(var i = 0; i < document.getElementById('addedSites').children.length; i++){
+        let cText = document.getElementById('addedSites').children[i].textContent;
+        cText = cText.split('\t')[0];
+        sites.push(cText);
+    }
+    
     //Validating the inputs first
-    if(!validateData(email, title, desc, startDate, endDate, img)){
+    if(!validateData(email, title, desc, startDate, endDate, img, sites)){
         return;
     }
     
@@ -128,6 +145,7 @@ async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone
         "EVT_ENDDATE":evtEnd,
         "EVT_IMAGE":img,
         "EVT_STARTDATE":evtStart,
+        "EVT_SITES": sites
     };
     
     fetch('https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json', {
