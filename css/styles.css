@@ -4,33 +4,28 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
-    position: absolute;
+    display: flex;
+    flex-direction: column;
 }
 
-/* FIXME: Overflowing y */
+#main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 #content {
-    position: relative;
+    flex: 1;
     display: flex;
     flex-direction: row;
-    height: 100%;
 }
 #timeSeries {
-    position: absolute;
     max-width: 30%;
     word-wrap: break-word;
-    height: 100%;
     overflow-y: scroll;
 }
 #content > div {
-    position: relative;
     flex: auto;
-    height: 100vh;
-}
-
-footer {
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
+    height: 100%;
 }
 
 h1 {
