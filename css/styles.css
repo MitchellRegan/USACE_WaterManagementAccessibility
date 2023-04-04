@@ -26,6 +26,29 @@ html {
 #content > div {
     flex: auto;
     height: 100%;
+    padding-left:20px;
+}
+
+#leftForm{
+    min-width:400px;
+    margin-right:20px;
+    padding:5px;
+    border-radius:5px;
+    background-color:#dfdfdf;
+}
+
+#rightForm{
+    min-width:400px;
+    margin-left:20px;
+    padding:5px;
+    border-radius:5px;
+    background-color:#dfdfdf;
+}
+
+#bottomForm{
+    text-align:center;
+    margin-bottom:30px;
+    margin-top:10px;
 }
 
 .footer {

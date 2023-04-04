@@ -28,19 +28,14 @@ function addSiteToList(){
     let nameText = document.createTextNode(name + "\t\t");
     let xButton = document.createElement("button");
     let xText = document.createTextNode("X");
-    xButton.onclick = removeSiteFromList;
     xButton.type = "button";
+    xButton.addEventListener('click', function(){liElement.remove();});
     siteDiv.appendChild(nameText);
     siteDiv.appendChild(xButton);
     xButton.appendChild(xText);
     
     //Parenting the new location name to the "addedSites" unordered list
     p.appendChild(liElement);
-}
-
-
-function removeSiteFromList(index){
-    console.log("Removing " + index.pointerId);
 }
 
 
@@ -158,7 +153,7 @@ async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone
     .then(response => response.json())
     .then(data => {
         if(data.hasOwnProperty('error')){
-            alert(data.error);
+            alert("An error occurred. Event not uploaded to database. Cause: " + data.error);
         }
         else{
             clearInputFields();
