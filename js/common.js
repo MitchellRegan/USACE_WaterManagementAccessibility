@@ -55,6 +55,11 @@ function search() {
     try{
         $(SEARCH_RESULTS).innerHTML = "";
         $(TIME_SERIES).innerHTML = "";
+        try{
+            myGraph.destroy();
+        } catch {
+            // we don't actually care haha
+        }
     }
     catch(e){
         console.log(e);
@@ -143,20 +148,27 @@ function autoFill() {
  * @async
  */
 async function findTimeSeries() {
-    if (!SELECTED_LOCATION) return;
+    if (!SELECTED_LOCATION) {
+        $(TIME_SERIES).innerHTML = "<h3>Select a location!</h3>";
+        return;
+    }
     toggleLoader();
     $(TIME_SERIES).innerHTML = "";
     // console.log(elem.dataset.name, elem.dataset.office);
     let office = SELECTED_LOCATION.office;
     let name = SELECTED_LOCATION.name;
     const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/catalog/timeseries?office=${office}&like=${encodeURIComponent(name)}%5C.`);
-    const res = await fetch(query);
-    const json = await res.json();
-    for (let timeSeries of json.entries) {
-        craftTimeSeriesSelector(timeSeries);
-    }
-    if (json.entries.length == 0) {
-        $(TIME_SERIES).innerHTML = "<h3>No Time Series Found :(</h3>";
+    try {
+        const res = await fetch(query);
+        const json = await res.json();
+        for (let timeSeries of json.entries) {
+            craftTimeSeriesSelector(timeSeries);
+        }
+        if (json.entries.length == 0) {
+            $(TIME_SERIES).innerHTML = "<h3>No Time Series Found :(</h3>";
+        }
+    } catch(e) {
+        $(TIME_SERIES).innerHTML = "<h3>Error :(</h3>";
     }
     toggleLoader();
 }
@@ -178,7 +190,7 @@ function craftTimeSeriesSelector(metaData) {
     console.log(metaData);
     let result = document.createElement('div');
     result.innerHTML = `
-        <h3>${metaData.name.split(".")[1]}</h3>
+        <h3>${metaData.name.split(".")[1]} ${metaData.name.split(".")[5]}</h3>
         <p>Measuring Interval: ${metaData.interval}</p>
         <p>Recording Unit: ${metaData.units}</p>
         <button onclick="graphTimeSeries(this.parentElement)">Graph Timeseries!</button>

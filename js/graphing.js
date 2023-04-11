@@ -30,9 +30,22 @@ async function graphTimeSeries(elem) {
     let office = meta.office;
     let siteID = meta.name;
 
-    let dB = await queryDB();
+    try {
+        let dB = await queryDB();
+    }
+    catch(e) {
+        console.warn("Failed to fetch annotations!", e);
+    }
 
-    let res = await queryAPI(office, siteID);
+    let res;
+    try {
+        res = await queryAPI(office, siteID);
+    } catch(e) {
+        $("#name").innerText = "Query Failed! Refresh the page and try again!\nIf the error persists, it may be a server error.";
+        GRAPHING = false;
+        toggleLoader();
+        return;
+    }
     res = res["time-series"];
 
     if (res['query-info']['total-time-series-retrieved'] == 0) {
@@ -69,15 +82,25 @@ async function queryAPI(office, name) {
     let endDate = $("#endDate").value;
 
     const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/timeseries?office=${office}&name=${encodeURIComponent(name)}&begin=${startDate}&end=${endDate}`);
-    const res = await fetch(query);
-    let data = await res.json();
-    return data;
+    
+    try {
+        const res = await fetch(query);
+        let data = await res.json();
+        return data;
+    }
+    catch(e) {
+        throw Error(e);
+    }
 }
 async function queryDB() {
     const dBQuery = new Request("https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json/?");
-    let dB = await fetch(dBQuery);
-    dB = await dB.json();
-    return dB;
+    try {
+        let dB = await fetch(dBQuery);
+        dB = await dB.json();
+        return dB;
+    } catch(e) {
+        throw Error(e);
+    }
 }
 
 // function addBoxAnnotation(info) {
@@ -185,17 +208,19 @@ function parseData(data) {
 
     if (intervalRegularity == "regular-interval-values") {
         const segment = timeSeries[intervalRegularity].segments[0];
+        const period = parsePeriod(timeSeries[intervalRegularity].interval);
         const comment = segment.comment.split(", ");
         const startTime = new Date(segment["first-time"]);
         const lastTime = new Date(segment["last-time"]);
         MIN_MAX_TIME = [startTime, lastTime];
         let values = segment.values;
         
-        let checkTime = startTime.addHours(0);
+        let checkTime = new Date(startTime);
 
         labels = [];
         for (let i = 0; i < segment["value-count"]; i++) {
-            labels.push(checkTime.addHours(i));
+            checkTime = checkTime.addPeriod(period);
+            labels.push(checkTime);
         }
 
         values = values.map((dataPoint) => {
@@ -216,9 +241,47 @@ function parseData(data) {
     return { labels, datasets };
 }
 
-// // FIXME: need more than just addHours (it can also be days, months, etc)
-Date.prototype.addHours = function(hours) {
-    var date = new Date(this.valueOf());
-    date.setHours(date.getHours() + hours);
-    return date;
+/**
+ * Parses ISO periods.
+ * @param {String} periodStr A string in ISO format defining a period. Ex: "PT1H"
+ * @returns An object with 
+ */
+function parsePeriod(periodStr) {
+    let KEYS = ["YMWD", "HMS"];
+    let DEFINITIONS = [["years", "months", "weeks", "days"], ["hours", "minutes", "seconds"]];
+    let afterTime = 0;
+    let parsed = {
+        years: 0,
+        months: 0,
+        weeks: 0,
+        days: 0,
+    
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    }
+    let temp = "";
+    for (let letter of periodStr) {
+        if (letter == "P") continue;
+        if (letter == "T") {
+            afterTime = 1;
+            continue;
+        }
+        if (KEYS[afterTime].indexOf(letter) == -1) {
+            temp += letter;
+        } else {
+            parsed[DEFINITIONS[afterTime][KEYS[afterTime].indexOf(letter)]] = parseFloat(temp);
+            temp = "";
+        }
+    }
+    return parsed;
+}
+
+Date.prototype.addPeriod = function(period) {
+    let newDate = new Date(this);
+    newDate.setFullYear(newDate.getFullYear()+period.years, newDate.getMonth()+period.months, newDate.getDate()+period.days+period.weeks*7);
+    newDate.setHours(newDate.getHours() + period.hours);
+    newDate.setMinutes(newDate.getMinutes() + period.minutes);
+    newDate.setSeconds(newDate.getSeconds() + period.seconds);
+    return newDate;
 }
