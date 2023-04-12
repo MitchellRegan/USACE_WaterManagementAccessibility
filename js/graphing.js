@@ -49,10 +49,13 @@ async function graphTimeSeries(elem) {
     res = res["time-series"];
 
     if (res['query-info']['total-time-series-retrieved'] == 0) {
-        $("#name").innerText = "Please try another time series!"
+        $("#name").innerText = "There may be no recorded data for the provided time range."
         console.error("No Data!");
     } else if (res["time-series"][0].error) {
         console.error(res["time-series"][0].error);
+        if (res["time-series"][0].error == "Not enough memory for CONNECT BY operation") {
+            $("#name").innerText = "Try using a smaller time-range. The API can only handle so much data.";
+        }
     } else {
         const ctx = $('#myChart');
         let { labels, datasets } = parseData(res);
