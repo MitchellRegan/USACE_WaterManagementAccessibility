@@ -46,8 +46,6 @@ fetchNameMeta();
  * Several (but not all) JSON attributes are searched for string matches.  
  * 
  * Also sorts the data (by state) into a window namespaced variable: `window.states`.
- * @TODO: Ignore special chars [. , etc.]
- * @TODO: Split on space and find all matches
  */
 function search() {
     let query = new RegExp($('#nameSearch').value, "i");
@@ -115,7 +113,6 @@ function matchCounty(option) {
  * *This should really only be called by the {@link search()} function.*  
  * @param {JSON} metaData The metadata of a specific water location.
  * @private
- * @TODO: Lots of undefineds and some weird formatting
  */
 function craftResult(metaData) {
     let result = document.createElement('div');
@@ -183,7 +180,7 @@ async function findTimeSeries() {
  * @private
  */
 function craftTimeSeriesSelector(metaData) {
-    // I thought extents would let me know the times of recordings but it doesn't. I have no idea what it is, but things without it don't tend to work so I'll keep this filter.
+    // I thought extents would let me know the times of recordings but it only kind of does. I have no idea what it is, but things without it don't tend to work so I'll keep this filter.
     if (metaData.extents.length == 0) return;
     // if (new Date($("#startDate").value) > new Date(metaData.extents[0]["latest-time"]) || new Date($("#endDate").value) < new Date(metaData.extents[0]["earliest-time"])) return;
 
@@ -193,6 +190,8 @@ function craftTimeSeriesSelector(metaData) {
         <h3>${metaData.name.split(".")[1]} ${metaData.name.split(".")[5]}</h3>
         <p>Measuring Interval: ${metaData.interval}</p>
         <p>Recording Unit: ${metaData.units}</p>
+        <p>Supposedly First Recorded On: ${new Date(metaData.extents[0]["earliest-time"]).toDateString()}</p>
+        <p>Supposedly Last Recorded On: ${new Date(metaData.extents[0]["latest-time"]).toDateString()}</p>
         <button onclick="graphTimeSeries(this.parentElement)">Graph Timeseries!</button>
     `;
     result.dataset.json = JSON.stringify(metaData);
