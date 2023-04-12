@@ -119,7 +119,7 @@
         <section id="main">
             <span class="cover"></span>
             <span class="loader"></span>
-            <div id="" class="fade collapse in">
+            <div id="search">
                 <label for="nameSearch">Name:</label>
                 <input id="nameSearch" type="text" onkeyup="search()" placeholder="Name" />
                 <label for="citySearch">City:</label>
@@ -133,9 +133,6 @@
                 <button onclick="findTimeSeries()">Search!</button>
                 <div id="searchResults" class="listContainer"></div>
             </div>
-            <!-- TODO: Turn into startDate and endDate selectors -->
-            <!-- <label for="numResults">Displayed Results:</label>
-            <input id="numResults" type="number" placeholder="AVOID HUGE VALUES"> -->
             <div id="content">
                 <div id="timeSeries" class="listContainer"></div>
                 <div>
