@@ -6,21 +6,21 @@ let MIN_MAX_TIME = [];
 window.addEventListener('load', () => {
     var now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-  
+
     /* remove second/millisecond if needed - credit ref. https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time#comment112871765_60884408 */
     now.setMilliseconds(null)
     now.setSeconds(null)
-  
+
     $("#endDate").value = now.toISOString().slice(0, -1);
-    now.setDate(now.getDate()-1);
+    now.setDate(now.getDate() - 1);
     $("#startDate").value = now.toISOString().slice(0, -1);
-  });
+});
 
 async function graphTimeSeries(elem) {
     if (GRAPHING) return;
     GRAPHING = true;
     toggleLoader();
-    
+
     if (myGraph != undefined) myGraph.destroy();
     annotations = [];
     $("#name").innerText = "";
@@ -33,14 +33,14 @@ async function graphTimeSeries(elem) {
     try {
         let dB = await queryDB();
     }
-    catch(e) {
+    catch (e) {
         console.warn("Failed to fetch annotations!", e);
     }
 
     let res;
     try {
         res = await queryAPI(office, siteID);
-    } catch(e) {
+    } catch (e) {
         $("#name").innerText = "Query Failed! Refresh the page and try again!\nIf the error persists, it may be a server error.";
         GRAPHING = false;
         toggleLoader();
@@ -75,7 +75,7 @@ async function graphTimeSeries(elem) {
         //     }
         // }
     }
-    
+
     toggleLoader();
     GRAPHING = false;
 }
@@ -85,13 +85,13 @@ async function queryAPI(office, name) {
     let endDate = $("#endDate").value;
 
     const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/timeseries?office=${office}&name=${encodeURIComponent(name)}&begin=${startDate}&end=${endDate}`);
-    
+
     try {
         const res = await fetch(query);
         let data = await res.json();
         return data;
     }
-    catch(e) {
+    catch (e) {
         throw Error(e);
     }
 }
@@ -101,7 +101,7 @@ async function queryDB() {
         let dB = await fetch(dBQuery);
         dB = await dB.json();
         return dB;
-    } catch(e) {
+    } catch (e) {
         throw Error(e);
     }
 }
@@ -210,14 +210,14 @@ function parseData(data) {
     if (timeSeries[intervalRegularity] == undefined) intervalRegularity = "irregular-interval-values";
 
     if (intervalRegularity == "regular-interval-values") {
+        // Spoiler: I don't know what it means if there are multiple segments 😬
         const segment = timeSeries[intervalRegularity].segments[0];
         const period = parsePeriod(timeSeries[intervalRegularity].interval);
         const comment = segment.comment.split(", ");
         const startTime = new Date(segment["first-time"]);
         const lastTime = new Date(segment["last-time"]);
-        MIN_MAX_TIME = [startTime, lastTime];
         let values = segment.values;
-        
+
         let checkTime = new Date(startTime);
 
         labels = [];
@@ -225,6 +225,7 @@ function parseData(data) {
             checkTime = checkTime.addPeriod(period);
             labels.push(checkTime);
         }
+        MIN_MAX_TIME = [labels[0].addPeriod(period, -1), labels[labels.length-1].addPeriod(period, 1)];
 
         values = values.map((dataPoint) => {
             return dataPoint[0];
@@ -232,11 +233,11 @@ function parseData(data) {
 
         console.log(data)
         console.log(labels)
-        
+
         let obj = { label, data: values, hidden: false };
         datasets.push(obj);
-    } 
-    
+    }
+
 
     else if (intervalRegularity == "irregular-interval-values") {
         // TODO: irregular interval graphing
@@ -258,7 +259,7 @@ function parsePeriod(periodStr) {
         months: 0,
         weeks: 0,
         days: 0,
-    
+
         hours: 0,
         minutes: 0,
         seconds: 0,
@@ -280,11 +281,11 @@ function parsePeriod(periodStr) {
     return parsed;
 }
 
-Date.prototype.addPeriod = function(period) {
+Date.prototype.addPeriod = function (period, scale = 1) {
     let newDate = new Date(this);
-    newDate.setFullYear(newDate.getFullYear()+period.years, newDate.getMonth()+period.months, newDate.getDate()+period.days+period.weeks*7);
-    newDate.setHours(newDate.getHours() + period.hours);
-    newDate.setMinutes(newDate.getMinutes() + period.minutes);
-    newDate.setSeconds(newDate.getSeconds() + period.seconds);
+    newDate.setFullYear(newDate.getFullYear() + scale * period.years, newDate.getMonth() + scale * period.months, newDate.getDate() + scale * period.days + scale * period.weeks * 7);
+    newDate.setHours(newDate.getHours() + scale * period.hours);
+    newDate.setMinutes(newDate.getMinutes() + scale * period.minutes);
+    newDate.setSeconds(newDate.getSeconds() + scale * period.seconds);
     return newDate;
 }
