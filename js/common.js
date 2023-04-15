@@ -200,11 +200,11 @@ function craftTimeSeriesSelector(metaData) {
 }
 
 function toggleLoader() {
-    if ($(LOADER)[0].style.display == "block") {
+    if ($(LOADER)[0].style.display == "flex") {
         $(COVER)[0].style.display = "none";
         $(LOADER)[0].style.display = "none";
     } else {
         $(COVER)[0].style.display = "block";
-        $(LOADER)[0].style.display = "block";
+        $(LOADER)[0].style.display = "flex";
     }
 }
