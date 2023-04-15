@@ -21,6 +21,12 @@
     z-index: 99;
     backdrop-filter: blur(10px);
     display: none;
+    text-align: center;
+}
+
+.cover > h1 {
+    top: 70%;
+    position: relative;
 }
 
 .loader:before,
