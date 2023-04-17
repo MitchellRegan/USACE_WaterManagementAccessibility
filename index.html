@@ -8,6 +8,9 @@
         <title>Water Levels | USACE</title>
         <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
 
+        <!-- PWA App Manifest File -->
+        <link rel="manifest" href="./json/manifest.json">
+
         <!-- CSS -->
         <link rel="stylesheet" href="css/a2w.public.min.css" media="screen">
         <link rel="stylesheet" href="css/styles.css">
@@ -180,6 +183,15 @@
                     Reserved.</div>
             </div>
         </section>
+
+        <!-- PWA Service Worker -->
+        <script>
+            if (!navigator.serviceWorker.controller) {
+                navigator.serviceWorker.register("/sw.js").then(function(reg) {
+                    console.log("Service worker has been registered for scope: " + reg.scope);
+                });
+            }
+           </script>
     </body>
 
 </html>
