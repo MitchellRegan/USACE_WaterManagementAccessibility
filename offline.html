@@ -6,10 +6,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Offline | USACE</title>
+
+        <!-- PWA App Manifest File -->
+        <link rel="manifest" href="./json/manifest.json">
     </head>
 
     <body>
         <h1>Sorry, but this application will only work while online!</h1>
     </body>
+
+    <!-- PWA Service Worker -->
+    <script>
+        if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.register("./sw.js").then(function (reg) {
+                console.log("Service worker has been registered for scope: " + reg.scope);
+            });
+        }
+    </script>
 
 </html>

@@ -1,61 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>USACE Login | USACE</title>
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/a2w.public.min.css" media="screen">
-    
-    <!-- Firebase OAuth CDN -->
-    <!-- Reference: https://github.com/firebase/firebaseui-web -->
-    <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css" />
-    <script type="text/javascript">
-        //import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-        // FirebaseUI config.
-        var uiConfig = {
-            signInSuccessUrl: './create_event.html',
-            signInOptions: [
-                // Leave the lines as is for the providers you want to offer your users.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID
-                
-                //These are other available options that we aren't currently using
-                //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-                //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-                //firebase.auth.GithubAuthProvider.PROVIDER_ID,
-                //firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                //firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-                //firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-            ]
-        };
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
-            authDomain: "mregan-capstone.firebaseapp.com",
-            databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
-            projectId: "mregan-capstone",
-            storageBucket: "mregan-capstone.appspot.com",
-            messagingSenderId: "736102415357",
-            appId: "1:736102415357:web:06211517f034486cc37794"
-        };
+    <head>
+        <!-- Meta -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>USACE Login | USACE</title>
+        <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
 
+        <!-- PWA App Manifest File -->
+        <link rel="manifest" href="./json/manifest.json">
 
-        // Initialize the FirebaseUI Widget using Firebase.
-        const app = firebase.initializeApp(firebaseConfig);
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
-    </script>
-    <!--Script to check if a user is already logged-in. If so, forwards to the create_event.html page-->
-    <script type="text/javascript">
-        initApp = function() {
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/a2w.public.min.css" media="screen">
+
+        <!-- Firebase OAuth CDN -->
+        <!-- Reference: https://github.com/firebase/firebaseui-web -->
+        <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.js"></script>
+        <link type="text/css" rel="stylesheet"
+            href="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css" />
+        <script type="text/javascript">
+            //import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+            // FirebaseUI config.
+            var uiConfig = {
+                signInSuccessUrl: './create_event.html',
+                signInOptions: [
+                    // Leave the lines as is for the providers you want to offer your users.
+                    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+
+                    //These are other available options that we aren't currently using
+                    //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                    //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                    //firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                    //firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                    //firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+                    //firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+                ]
+            };
+
             const firebaseConfig = {
                 apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
                 authDomain: "mregan-capstone.firebaseapp.com",
@@ -65,124 +50,182 @@
                 messagingSenderId: "736102415357",
                 appId: "1:736102415357:web:06211517f034486cc37794"
             };
+
+
+            // Initialize the FirebaseUI Widget using Firebase.
             const app = firebase.initializeApp(firebaseConfig);
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    window.location.href = "./create_event.html";
-                }
-            }, function(error) {
-                console.log(error);
+            var ui = new firebaseui.auth.AuthUI(firebase.auth());
+            // The start method will wait until the DOM is loaded.
+            ui.start('#firebaseui-auth-container', uiConfig);
+        </script>
+        <!--Script to check if a user is already logged-in. If so, forwards to the create_event.html page-->
+        <script type="text/javascript">
+            initApp = function () {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
+                    authDomain: "mregan-capstone.firebaseapp.com",
+                    databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
+                    projectId: "mregan-capstone",
+                    storageBucket: "mregan-capstone.appspot.com",
+                    messagingSenderId: "736102415357",
+                    appId: "1:736102415357:web:06211517f034486cc37794"
+                };
+                const app = firebase.initializeApp(firebaseConfig);
+                firebase.auth().onAuthStateChanged(function (user) {
+                    if (user) {
+                        window.location.href = "./create_event.html";
+                    }
+                }, function (error) {
+                    console.log(error);
+                });
+            };
+
+            window.addEventListener('load', function () {
+                initApp()
             });
-        };
+        </script>
+    </head>
 
-        window.addEventListener('load', function() {
-            initApp()
-        });
-    </script>
-</head>
-    
-<body class="" style="padding-top:85px;">
-    <header>
-        <nav id="main-navigation" class="navbar navbar-default navbar-fixed-top banner" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="container-fluid" style="padding: 0 15px;">
-          <div class="navbar-header">
-            <a class="navbar-brand home-nav" id="nav-home" style="width: auto">
-              <div class="logo_content" style="width: 100%">
-                <div class="USACE_logo hidden-xs"> 
-                  <img src="https://water.usace.army.mil/a2w_files/production/images/USACE_logo.png" alt="United States Army Corps of Engineers logo" width="72" height="49">
-                </div>
-                <div class="USACE_logo visible-xs"> 
-                  <img src="https://water.usace.army.mil/a2w_files/production/images/USACE_logo.png" alt="United States Army Corps of Engineers logo" width="58" height="40">
-                </div>
-                <div class="pull-right">
-                  <div class="main_title visible-xs-inline visible-sm-inline hidden-md hidden-lg" title="Access to Water Resources Data">A2W</div>
-                  <div class="main_title hidden-xs hidden-sm">Access to Water Resources Data</div>
-                  <div class="secondary_title visible-xs-block visible-sm-block hidden-md hidden-lg" style="font-size: 18px; color: #ccc;" title="WM Data Dissemination">WM &amp; WQ</div>
-                  <div class="secondary_title hidden-xs hidden-sm" style="font-size: 18px; color: #ccc;">WM Data Dissemination</div>
-                </div>    
-              </div>
-            </a>
-            <button type="button" class="navbar-toggle collapsed pull-right" data-toggle="collapse" data-target="#navButtonia" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
+    <body class="" style="padding-top:85px;">
+        <header>
+            <nav id="main-navigation" class="navbar navbar-default navbar-fixed-top banner" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="container-fluid" style="padding: 0 15px;">
+                    <div class="navbar-header">
+                        <a class="navbar-brand home-nav" id="nav-home" style="width: auto">
+                            <div class="logo_content" style="width: 100%">
+                                <div class="USACE_logo hidden-xs">
+                                    <img src="https://water.usace.army.mil/a2w_files/production/images/USACE_logo.png"
+                                        alt="United States Army Corps of Engineers logo" width="72" height="49">
+                                </div>
+                                <div class="USACE_logo visible-xs">
+                                    <img src="https://water.usace.army.mil/a2w_files/production/images/USACE_logo.png"
+                                        alt="United States Army Corps of Engineers logo" width="58" height="40">
+                                </div>
+                                <div class="pull-right">
+                                    <div class="main_title visible-xs-inline visible-sm-inline hidden-md hidden-lg"
+                                        title="Access to Water Resources Data">A2W</div>
+                                    <div class="main_title hidden-xs hidden-sm">Access to Water Resources Data</div>
+                                    <div class="secondary_title visible-xs-block visible-sm-block hidden-md hidden-lg"
+                                        style="font-size: 18px; color: #ccc;" title="WM Data Dissemination">WM &amp; WQ
+                                    </div>
+                                    <div class="secondary_title hidden-xs hidden-sm"
+                                        style="font-size: 18px; color: #ccc;">WM Data Dissemination</div>
+                                </div>
+                            </div>
+                        </a>
+                        <button type="button" class="navbar-toggle collapsed pull-right" data-toggle="collapse"
+                            data-target="#navButtonia" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
 
-          <div class="collapse navbar-collapse" id="navButtonia">
-            <ul class="nav navbar-nav navbar-right navbar-icons pull-right">
-                <li class="navbar-icon map-nav" id="nav-map" title="Map">
-                    <a href="https://water.usace.army.mil/a2w/f?p=100:1#" class="ladda-button" data-style="expand-right" data-size="l" data-spinner-size="16" data-spinner-color="#000000" data-toggle="collapse" data-target="#navButtonia">
-                        <span class="ladda-label">
-                            <i alt="Map" class="fa fa-map-marker"></i>
-                            <span> Map</span>
-                        </span>
-                        <span class="ladda-spinner"></span>
-                    </a>
-                </li>
-                <li class="navbar-icon reporting-nav" id="nav-reporting" title="Overview">
-                    <a href="https://water.usace.army.mil/a2w/f?p=100:1#" class="ladda-button" data-style="expand-right" data-size="l" data-spinner-size="16" data-spinner-color="#000000" data-toggle="collapse" data-target="#navButtonia">
-                        <span class="ladda-label">
-                        <i alt="Overview" class="fa fa-list fa-flip-horizontal"></i>
-                            <span> Overview</span>
-                        </span>
-                    </a>
-                </li>
-                <li class="navbar-icon reporting-nav" id="nav-reporting" title="Overview">
-                    <a href="./index.html" class="ladda-button" data-style="expand-right" data-size="l" data-spinner-size="16" data-spinner-color="#000000" data-toggle="collapse" data-target="#navButtonia">
-                        <span class="ladda-label">
-                        <i alt="Overview" class="fa fa-list fa-flip-horizontal"></i>
-                            <span> Site Search</span>
-                        </span>
-                    </a>
-                </li>
-                <li class="navbar-icon reporting-nav" id="nav-reporting" title="Overview">
-                    <a href="./usace_login.html" class="ladda-button" data-style="expand-right" data-size="l" data-spinner-size="16" data-spinner-color="#000000" data-toggle="collapse" data-target="#navButtonia">
-                        <span class="ladda-label">
-                        <i alt="Overview" class="fa fa-list fa-flip-horizontal"></i>
-                            <span> Create Event</span>
-                        </span>
-                    </a>
-                </li>
-                <li class="navbar-icon" title="Help">
-                    <a href="" id="helpButton" data-toggle="modal" data-target="#helpDialog" title="Help">
-                        <span alt="Help" class="fa fa-question-circle"></span>
-                        <span> Help</span>
-                    </a>
-                </li>
-            </ul>
-          </div>
+                    <div class="collapse navbar-collapse" id="navButtonia">
+                        <ul class="nav navbar-nav navbar-right navbar-icons pull-right">
+                            <li class="navbar-icon map-nav" id="nav-map" title="Map">
+                                <a href="https://water.usace.army.mil/a2w/f?p=100:1#" class="ladda-button"
+                                    data-style="expand-right" data-size="l" data-spinner-size="16"
+                                    data-spinner-color="#000000" data-toggle="collapse" data-target="#navButtonia">
+                                    <span class="ladda-label">
+                                        <i alt="Map" class="fa fa-map-marker"></i>
+                                        <span> Map</span>
+                                    </span>
+                                    <span class="ladda-spinner"></span>
+                                </a>
+                            </li>
+                            <li class="navbar-icon reporting-nav" id="nav-reporting" title="Overview">
+                                <a href="https://water.usace.army.mil/a2w/f?p=100:1#" class="ladda-button"
+                                    data-style="expand-right" data-size="l" data-spinner-size="16"
+                                    data-spinner-color="#000000" data-toggle="collapse" data-target="#navButtonia">
+                                    <span class="ladda-label">
+                                        <i alt="Overview" class="fa fa-list fa-flip-horizontal"></i>
+                                        <span> Overview</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="navbar-icon reporting-nav" id="nav-reporting" title="Overview">
+                                <a href="./index.html" class="ladda-button" data-style="expand-right" data-size="l"
+                                    data-spinner-size="16" data-spinner-color="#000000" data-toggle="collapse"
+                                    data-target="#navButtonia">
+                                    <span class="ladda-label">
+                                        <i alt="Overview" class="fa fa-list fa-flip-horizontal"></i>
+                                        <span> Site Search</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="navbar-icon reporting-nav" id="nav-reporting" title="Overview">
+                                <a href="./usace_login.html" class="ladda-button" data-style="expand-right"
+                                    data-size="l" data-spinner-size="16" data-spinner-color="#000000"
+                                    data-toggle="collapse" data-target="#navButtonia">
+                                    <span class="ladda-label">
+                                        <i alt="Overview" class="fa fa-list fa-flip-horizontal"></i>
+                                        <span> Create Event</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="navbar-icon" title="Help">
+                                <a href="" id="helpButton" data-toggle="modal" data-target="#helpDialog" title="Help">
+                                    <span alt="Help" class="fa fa-question-circle"></span>
+                                    <span> Help</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div id="main" style="display:block; margin-left:auto; margin-right:auto; text-align:center; min-width:400px;">
+            <h1>USACE Login</h1>
+            <p>Please login using to access the event creation screen.</p>
+            <div id="firebaseui-auth-container"></div>
         </div>
-      </nav>
-    </header>
-    
-    <div id="main" style="display:block; margin-left:auto; margin-right:auto; text-align:center; min-width:400px;">
-        <h1>USACE Login</h1>
-        <p>Please login using to access the event creation screen.</p>
-        <div id="firebaseui-auth-container"></div>
-    </div>
-    
-    <section class="container-fluid footer">
-      <div class="row-fluid footer_links">
-        <div class="col-md-1"><a id="aboutFooter" class="footer_link" style="color: white; cursor: pointer;">About Us</a></div>
-        <div class="col-md-1"><a id="legalFooter" class="footer_link" style="color: white; cursor: pointer;">Legal</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/Accessibility.aspx">Accessibility</a></div>
-        <div class="col-md-1"><a style="color: white; cursor: pointer;" href="mailto:water@usace.army.mil">Contact Us</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/FOIA.aspx">FOIA</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/InformationQualityAct.aspx">Information Quality Act</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/LinkDisclaimer.aspx">Link Disclaimer</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://prhome.defense.gov/nofear">No Fear Act</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/PrivacyandSecurity.aspx">Privacy &amp; Security</a></div>
-        <div class="col-md-1"><a style="color: white; cursor: pointer;" href="mailto:Bryan.R.Armbrust@usace.army.mil">Public Inquiries</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="http://www.usace.army.mil/SiteMap.aspx">Site Map</a></div>
-        <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;" href="https://www.usa.gov/">USA.gov</a></div>
-      </div>
-      <div class="row-fluid">
-        <div class="col-md-12 footer_copyright">? 2018	|United States Army Corp of Engineers. All Rights Reserved.</div>
-      </div>
-    </section>
-</body>
-    
+
+        <section class="container-fluid footer">
+            <div class="row-fluid footer_links">
+                <div class="col-md-1"><a id="aboutFooter" class="footer_link"
+                        style="color: white; cursor: pointer;">About Us</a></div>
+                <div class="col-md-1"><a id="legalFooter" class="footer_link"
+                        style="color: white; cursor: pointer;">Legal</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://www.usace.army.mil/Accessibility.aspx">Accessibility</a></div>
+                <div class="col-md-1"><a style="color: white; cursor: pointer;"
+                        href="mailto:water@usace.army.mil">Contact Us</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://www.usace.army.mil/FOIA.aspx">FOIA</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://www.usace.army.mil/InformationQualityAct.aspx">Information Quality Act</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://www.usace.army.mil/LinkDisclaimer.aspx">Link Disclaimer</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://prhome.defense.gov/nofear">No Fear Act</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://www.usace.army.mil/PrivacyandSecurity.aspx">Privacy &amp; Security</a></div>
+                <div class="col-md-1"><a style="color: white; cursor: pointer;"
+                        href="mailto:Bryan.R.Armbrust@usace.army.mil">Public Inquiries</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="http://www.usace.army.mil/SiteMap.aspx">Site Map</a></div>
+                <div class="col-md-1"><a target="_blank" style="color: white; cursor: pointer;"
+                        href="https://www.usa.gov/">USA.gov</a></div>
+            </div>
+            <div class="row-fluid">
+                <div class="col-md-12 footer_copyright">? 2018 |United States Army Corp of Engineers. All Rights
+                    Reserved.</div>
+            </div>
+        </section>
+
+
+        <!-- PWA Service Worker -->
+        <script>
+            if (!navigator.serviceWorker.controller) {
+                navigator.serviceWorker.register("./sw.js").then(function (reg) {
+                    console.log("Service worker has been registered for scope: " + reg.scope);
+                });
+            }
+        </script>
+    </body>
+
 </html>
