@@ -4,7 +4,7 @@
     "theme_color": "#003dff",
     "background_color": "#617378",
     "display": "standalone",
-    "scope": "/",
+    "scope": "./",
     "start_url": "https://mitchellregan.github.io/USACE_WaterManagementAccessibility/",
     "description": "A proof-of-concept website for exploring USACE water project data with the ability to provide historical context. Developed for the USACE by Mitchell Regan and Matthew Postel.",
     "orientation": "any",

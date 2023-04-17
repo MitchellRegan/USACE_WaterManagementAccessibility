@@ -6,7 +6,7 @@ let preLoad = function () {
     console.log("Installing web app");
     return caches.open("offline").then(function (cache) {
         console.log("caching index and important routes");
-        return cache.addAll(["/", "/offline.html", "/json/meta.json"]);
+        return cache.addAll(["./", "./offline.html", "./json/meta.json"]);
     });
 };
 
