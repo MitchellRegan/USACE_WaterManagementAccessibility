@@ -1,3 +1,65 @@
+let idToken = undefined;
+
+/*
+Firebase code for initializing the OAuth login.
+Reference: https://github.com/firebase/firebaseui-web
+*/
+function initApp() {
+    const firebaseConfig = {
+        apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
+        authDomain: "mregan-capstone.firebaseapp.com",
+        databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
+        projectId: "mregan-capstone",
+        storageBucket: "mregan-capstone.appspot.com",
+        messagingSenderId: "736102415357",
+        appId: "1:736102415357:web:06211517f034486cc37794"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var email = user.email;
+            user.getIdToken()
+                .then(t => { idToken = t; })
+            
+            document.getElementById("email").value = user.email;
+            document.getElementById('signedIn').style.display = 'visible';
+            document.getElementById('signedOut').style.display = 'none';
+            //Only allowing USACE members to access this page
+            if (email.split('@')[0] == 'usace.army.mil') {
+                document.getElementById('invalidUser').style.display = 'visible';
+            }
+        } else {
+            // User is signed out.
+            document.getElementById('signedIn').style.display = 'none';
+            document.getElementById('signedOut').style.display = 'visible';
+            document.getElementById('invalidUser').style.display = 'none';
+        }
+    }, function (error) {
+        console.log(error);
+    });
+};
+
+
+//Loading the Firebase OAuth code when the page loads
+window.addEventListener('load', function () {
+    initApp()
+});
+
+
+/*
+Firebase code for logging the user out.
+Reference: https://github.com/firebase/firebaseui-web
+*/
+function logUserOut () {
+    firebase.auth().signOut().then(() => {
+        token = undefined;
+        console.log("signing out...");
+        window.location.href = './usace_login.html';
+    });
+};
+
+
 /**
 * Called from create_event.html when the user types in the siteSearch input field.
 * Fills the siteList datalist with valid water site options based on their input.
@@ -102,6 +164,11 @@ function clearInputFields(){
 * Function called from create_event.html on form submission.
 */
 async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone, img){
+    if(idToken === undefined){
+        alert("You do not appear to be logged in. That's odd...");
+        return;
+    }
+    
     //Getting the list of water sites
     let sites = [];
     for(var i = 0; i < document.getElementById('addedSites').children.length; i++){
@@ -142,13 +209,23 @@ async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone
         "EVT_STARTDATE":evtStart,
         "EVT_SITES": sites
     };
+    console.log(evtjson);
     
     fetch('https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json', {
         method: 'POST',
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'Authorization': 'Bearer ' + idToken
         },
-        body: JSON.stringify(evtjson)
+        body: JSON.stringify({
+            "EMAIL":email,
+            "EVT_TITLE":title,
+            "EVT_DESC":desc,
+            "EVT_ENDDATE":evtEnd,
+            "EVT_IMAGE":img,
+            "EVT_STARTDATE":evtStart,
+            "EVT_SITES": sites
+        })
     })
     .then(response => response.json())
     .then(data => {

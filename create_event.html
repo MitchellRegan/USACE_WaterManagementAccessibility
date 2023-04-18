@@ -15,70 +15,14 @@
         <link rel="stylesheet" href="css/styles.css">
         <link rel="stylesheet" href="css/a2w.public.min.css" media="screen">
 
-        <!-- JS -->
-        <script defer type="text/javascript" src="./js/create_database_event.js"></script>
-        <script defer type="text/javascript" src="./js/common.js"></script>
-
         <!-- Firebase OAuth CDN -->
         <!-- Reference: https://github.com/firebase/firebaseui-web -->
         <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
-        <script type="text/javascript">
-            initApp = function () {
-                const firebaseConfig = {
-                    apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
-                    authDomain: "mregan-capstone.firebaseapp.com",
-                    databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
-                    projectId: "mregan-capstone",
-                    storageBucket: "mregan-capstone.appspot.com",
-                    messagingSenderId: "736102415357",
-                    appId: "1:736102415357:web:06211517f034486cc37794"
-                };
-                const app = firebase.initializeApp(firebaseConfig);
-                firebase.auth().onAuthStateChanged(function (user) {
-                    if (user) {
-                        // User is signed in.
-                        var displayName = user.displayName;
-                        var email = user.email;
-                        var emailVerified = user.emailVerified;
-                        var photoURL = user.photoURL;
-                        var uid = user.uid;
-                        var phoneNumber = user.phoneNumber;
-                        var providerData = user.providerData;
-                        var token = undefined;
-                        user.getIdToken()
-                            .then(t => { token = t; })
 
-                        document.getElementById("email").value = user.email;
-                        document.getElementById('signedIn').style.display = 'visible';
-                        document.getElementById('signedOut').style.display = 'none';
-
-                        //Only allowing USACE members to access this page
-                        if (email.split('@')[0] == 'usace.army.mil') {
-                            document.getElementById('invalidUser').style.display = 'visible';
-                        }
-                    } else {
-                        // User is signed out.
-                        document.getElementById('signedIn').style.display = 'none';
-                        document.getElementById('signedOut').style.display = 'visible';
-                        document.getElementById('invalidUser').style.display = 'none';
-                    }
-                }, function (error) {
-                    console.log(error);
-                });
-            };
-
-            window.addEventListener('load', function () {
-                initApp()
-            });
-
-            logUserOut = function () {
-                firebase.auth().signOut().then(() => {
-                    console.log("signing out...");
-                    window.location.href = './usace_login.html';
-                });
-            };
-        </script>
+        <!-- JS -->
+        <script defer type="text/javascript" src="./js/create_database_event.js"></script>
+        <script defer type="text/javascript" src="./js/common.js"></script>
     </head>
 
     <body class="" style="padding-top:85px; overflow:auto">
@@ -185,11 +129,11 @@
 
             <div id="invalidUser">
                 <i class="requiredText">You are not signed in as a member of the USACE. Any entered data will not be
-                    saved.</i>
+                    saved. These input fields are only being displayed for testing purposes.</i>
             </div>
         </div>
 
-        <div id="signedIn main" style="margin-left:auto; margin-right:auto; min-width: 400px;">
+        <div id="signedIn" style="margin-left:auto; margin-right:auto; min-width: 400px;">
             <form id="evtForm"
                 style="display:flex; flex-direction:row; justify-content:center; margin-left:auto; margin-right:auto;">
                 <div id="leftForm">
