@@ -209,9 +209,8 @@ async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone
         "EVT_STARTDATE":evtStart,
         "EVT_SITES": sites
     };
-    console.log(evtjson);
     
-    fetch('https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json', {
+    fetch('https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json?auth='+idToken, {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
