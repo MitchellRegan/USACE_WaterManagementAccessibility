@@ -115,10 +115,20 @@ function validateData(email, title, desc, sDate, eDate, img, sites){
         alert("Please provide a title for this event.");
         return false;
     }
+    if(!(/^[a-zA-Z0-9_\-\s]*$/.test(title))){
+        alert("The title can only contain letters, numbers, spaces, hyphens, and underscores.")
+        return false;
+    }
+    
     if(desc == ''){
         alert("Please provide a description for the event.");
         return false;
     }
+    if(!(/^[a-zA-Z0-9_.\-\s]*$/.test(desc))){
+        alert("The description can only contain letters, numbers, periods, spaces, hyphens, and underscores.")
+        return false;
+    }
+    
     if(sDate == '' || eDate == ''){
         alert("Please provide a starting date and ending date for when this event occurred.");
         return false;
