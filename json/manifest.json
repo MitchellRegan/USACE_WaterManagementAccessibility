@@ -10,8 +10,8 @@
     "orientation": "any",
     "icons": [
         {
-            "src": "https://water.usace.army.mil/a2w_files/production/images/USACE_logo.png",
-            "sizes": "795x544"
+            "src": "./appicon.png",
+            "sizes": "1024x1024"
         }
     ]
 }
