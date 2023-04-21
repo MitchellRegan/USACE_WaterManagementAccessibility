@@ -61,8 +61,8 @@ async function graphTimeSeries(elem) {
         }
     } else {
         const ctx = $('#myChart');
-        let { labels, datasets } = parseData(res);
-        makeGraph(ctx, labels, datasets);
+        let { labels, datasets, unit } = parseData(res);
+        makeGraph(ctx, labels, datasets, unit);
 
         for (let event of Object.getOwnPropertyNames(dB)) {
             let info = dB[event];
@@ -148,12 +148,16 @@ function addBoxAnnotation(info) {
     annotations.push(anno);
 }
 
-function makeGraph(ctx, labels, datasets) {
+function makeGraph(ctx, labels, datasets, unit) {
     const options = {
         scales: {
             y: {
                 beginAtZero: false,
                 position: 'left',
+                title: {
+                    display: true,
+                    text: `Measurement Value (${unit})`,
+                }
             },
             x: {
                 min: MIN_MAX_TIME[0],
@@ -201,6 +205,7 @@ function parseData(data) {
     let datasets = [];
     let labels;
     let label = timeSeries.name;
+    let unit;
 
     // Will have either "regular-interval-values" or "irregular-interval-values"
     let intervalRegularity = "regular-interval-values";
@@ -214,6 +219,7 @@ function parseData(data) {
         const startTime = new Date(segment["first-time"]);
         const lastTime = new Date(segment["last-time"]);
         let values = segment.values;
+        unit = timeSeries[intervalRegularity].unit;
 
         let checkTime = new Date(startTime);
 
@@ -225,7 +231,7 @@ function parseData(data) {
         MIN_MAX_TIME = [labels[0].addPeriod(period, -1), labels[labels.length-1].addPeriod(period, 1)];
 
         values = values.map((dataPoint) => {
-            return dataPoint[0];
+            return dataPoint[comment.indexOf("value")];
         });
 
         let obj = { label, data: values, hidden: false };
@@ -234,9 +240,18 @@ function parseData(data) {
 
 
     else if (intervalRegularity == "irregular-interval-values") {
-        // TODO: irregular interval graphing
+        const data = timeSeries[intervalRegularity];
+        unit = data.unit;
+        const comment = data.comment.split(", ");
+        const dataPoints = data.values;
+
+        let values = dataPoints.map(e => e[comment.indexOf("value")]);
+        labels = dataPoints.map(e => new Date(e[comment.indexOf("time")]));
+        
+        let obj = { label, data: values, hidden: false };
+        datasets.push(obj);
     }
-    return { labels, datasets };
+    return { labels, datasets, unit };
 }
 
 /**
