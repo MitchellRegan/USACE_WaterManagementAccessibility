@@ -132,7 +132,7 @@ function craftResult(metaData) {
 
 function autoFill() {
     let metaData = JSON.parse(this.dataset.meta);
-    $(NAME_SEARCH).value = metaData[PUBLIC_NAME];
+    $(NAME_SEARCH).value = metaData[PUBLIC_NAME] || metaData["name"];
     $(SEARCH_RESULTS).innerHTML = "";
     SELECTED_LOCATION = metaData;
 }
