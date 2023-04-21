@@ -10,7 +10,7 @@
     "orientation": "any",
     "icons": [
         {
-            "src": "./appicon.png",
+            "src": "https://mitchellregan.github.io/USACE_WaterManagementAccessibility/appicon.png",
             "sizes": "1024x1024"
         }
     ]
