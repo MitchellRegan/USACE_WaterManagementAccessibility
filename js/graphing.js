@@ -71,21 +71,6 @@ async function graphTimeSeries(elem) {
                 myGraph.update();
             }
         }
-
-        // IDEA:
-        // if (siteID in dB["WATER_SITES"]) {
-        //     $("#name").innerText = dB["WATER_SITES"][siteID]["SITE_NAME"];
-        //     $("#description").innerText = dB["WATER_SITES"][siteID]["SITE_DESC"];
-        // }
-        // if (siteID in dB["EVENT_SITES"]) {
-        //     for (let annotation of dB["EVENT_SITES"][siteID]) {
-        //         let evt_id = annotation["EVT_ID"];
-        //         evt_id = 0;
-        //         let info = dB["HISTORICAL_EVENTS"][evt_id];
-        //         addBoxAnnotation(info);
-        //         myGraph.update();
-        //     }
-        // }
     }
 
     toggleLoader();
