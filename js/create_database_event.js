@@ -69,7 +69,7 @@ function addSiteToList(){
     let name = document.getElementById("nameSearch").value;
     
     //Check if the site is valid
-    if(name == ''){
+    if(name == '' || SELECTED_LOCATION == '' || SELECTED_LOCATION == undefined){
         document.getElementById("invalidSiteName").style.display = "block";
         return;
     }

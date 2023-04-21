@@ -128,8 +128,7 @@
             </div>
 
             <div id="invalidUser">
-                <i class="requiredText">You are not signed in as a member of the USACE. Any entered data will not be
-                    saved. These input fields are only being displayed for testing purposes.</i>
+                <i class="requiredText">You are not signed in as a member of the USACE. These input fields are only being displayed for testing purposes.</i>
             </div>
         </div>
 
@@ -203,6 +202,8 @@
 
                 <div id="rightForm">
                     <label for="nameSearch">Affected Water Sites<i class="requiredText">*</i>:</label>
+                    <p id="invalidSiteName" style="text-align: center; display:none;"><i class="requiredText"
+                            style="margin:auto">Invalid location name. Please use the search bar and select one of the locations from the list.</i></p>
                     <div id="" class="fade collapse in">
                         <label for="nameSearch">Search:</label>
                         <input id="nameSearch" type="text" onkeyup="search()" placeholder="Site Name" />
@@ -215,8 +216,6 @@
                         <button type="button" onclick="addSiteToList()">Add To List</button>
                         <div id="searchResults" class="listContainer"></div>
                     </div>
-                    <p id="invalidSiteName" style="text-align: center; display:none;"><i class="requiredText"
-                            style="margin:auto">Please enter a valid location name</i></p>
                     <ul id="addedSites"></ul>
                 </div>
             </form>
