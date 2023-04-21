@@ -36,7 +36,7 @@ function initApp() {
             document.getElementById('invalidUser').style.display = 'none';
         }
     }, function (error) {
-        console.log(error);
+        console.error(error);
     });
 };
 
@@ -54,7 +54,7 @@ Reference: https://github.com/firebase/firebaseui-web
 function logUserOut () {
     firebase.auth().signOut().then(() => {
         token = undefined;
-        console.log("signing out...");
+        console.info("signing out...");
         window.location.href = './usace_login.html';
     });
 };
@@ -65,11 +65,8 @@ function logUserOut () {
 * Fills the siteList datalist with valid water site options based on their input.
 */
 function addSiteToList(){
-    //Get the site name from the input field
-    let name = document.getElementById("nameSearch").value;
-    
     //Check if the site is valid
-    if(name == '' || SELECTED_LOCATION == '' || SELECTED_LOCATION == undefined){
+    if(SELECTED_LOCATION == undefined){
         document.getElementById("invalidSiteName").style.display = "block";
         return;
     }
@@ -83,11 +80,12 @@ function addSiteToList(){
     
     //Creating a text element to display the newly added location name
     let liElement = document.createElement("li");
+    liElement.dataset.meta = JSON.stringify(SELECTED_LOCATION);
     
     let siteDiv = document.createElement("div");
     liElement.appendChild(siteDiv);
     
-    let nameText = document.createTextNode(name + "\t\t");
+    let nameText = document.createTextNode(SELECTED_LOCATION["public-name"] || SELECTED_LOCATION["name"] + "\t\t");
     let xButton = document.createElement("button");
     let xText = document.createTextNode("X");
     xButton.type = "button";
@@ -98,6 +96,8 @@ function addSiteToList(){
     
     //Parenting the new location name to the "addedSites" unordered list
     p.appendChild(liElement);
+
+    SELECTED_LOCATION = undefined;
 }
 
 
@@ -182,9 +182,9 @@ async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone
     //Getting the list of water sites
     let sites = [];
     for(var i = 0; i < document.getElementById('addedSites').children.length; i++){
-        let cText = document.getElementById('addedSites').children[i].textContent;
-        cText = cText.split('\t')[0];
-        sites.push(cText);
+        let metaData = document.getElementById('addedSites').children[i].dataset.meta;
+        metaData = JSON.parse(metaData);
+        sites.push(metaData["name"]);
     }
     
     //Validating the inputs first
