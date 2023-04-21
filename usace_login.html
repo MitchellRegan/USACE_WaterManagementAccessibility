@@ -79,7 +79,7 @@
                         window.location.href = "./create_event.html";
                     }
                 }, function (error) {
-                    console.log(error);
+                    console.error(error);
                 });
             };
 
@@ -225,7 +225,7 @@
         <script>
             if (!navigator.serviceWorker.controller) {
                 navigator.serviceWorker.register("./sw.js").then(function (reg) {
-                    console.log("Service worker has been registered for scope: " + reg.scope);
+                    console.info("Service worker has been registered for scope: " + reg.scope);
                 });
             }
         </script>

@@ -60,7 +60,7 @@ function search() {
         }
     }
     catch(e){
-        console.log(e);
+        console.error(e);
     }
     if ($(NAME_SEARCH).value=="" && $(CITY_SEARCH).value=="" && $(COUNTY_SEARCH).value=="") return;
     for (let letter of Object.getOwnPropertyNames(window["names"])) {
@@ -151,7 +151,6 @@ async function findTimeSeries() {
     }
     toggleLoader();
     $(TIME_SERIES).innerHTML = "";
-    // console.log(elem.dataset.name, elem.dataset.office);
     let office = SELECTED_LOCATION.office;
     let name = SELECTED_LOCATION.name;
     const query = new Request(`https://cwms-data.usace.army.mil/cwms-data/catalog/timeseries?office=${office}&like=${encodeURIComponent(name)}%5C.`);
@@ -184,7 +183,6 @@ function craftTimeSeriesSelector(metaData) {
     if (metaData.extents.length == 0) return;
     // if (new Date($("#startDate").value) > new Date(metaData.extents[0]["latest-time"]) || new Date($("#endDate").value) < new Date(metaData.extents[0]["earliest-time"])) return;
 
-    console.log(metaData);
     let result = document.createElement('div');
     result.innerHTML = `
         <h3>${metaData.name.split(".")[1]} ${metaData.name.split(".")[5]}</h3>

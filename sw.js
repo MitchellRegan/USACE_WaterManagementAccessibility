@@ -3,9 +3,9 @@ self.addEventListener("install", function (event) {
 });
 
 let preLoad = function () {
-    console.log("Installing web app");
+    console.info("Installing web app");
     return caches.open("offline").then(function (cache) {
-        console.log("caching index and important routes");
+        console.info("caching index and important routes");
         return cache.addAll(["./", "./offline.html", "./json/meta.json"]);
     });
 };
@@ -32,7 +32,7 @@ var checkResponse = function (request) {
 var addToCache = function (request) {
     return caches.open("offline").then(function (cache) {
         return fetch(request).then(function (response) {
-            console.log(response.url + " was cached");
+            console.info(response.url + " was cached");
             return cache.put(request, response);
         });
     });
