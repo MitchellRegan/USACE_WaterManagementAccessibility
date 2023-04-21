@@ -3,6 +3,8 @@ let myGraph;
 let GRAPHING = false;
 let MIN_MAX_TIME = [];
 
+// IDEA: Round time to nearest 15 or hour
+
 window.addEventListener('load', () => {
     var now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -29,9 +31,10 @@ async function graphTimeSeries(elem) {
     let meta = JSON.parse(elem.dataset.json);
     let office = meta.office;
     let siteID = meta.name;
+    let dB;
 
     try {
-        let dB = await queryDB();
+        dB = await queryDB();
     }
     catch (e) {
         console.warn("Failed to fetch annotations!", e);
@@ -61,6 +64,15 @@ async function graphTimeSeries(elem) {
         let { labels, datasets } = parseData(res);
         makeGraph(ctx, labels, datasets);
 
+        for (let event of Object.getOwnPropertyNames(dB)) {
+            let info = dB[event];
+            if (info.EVT_SITES.includes(SELECTED_LOCATION.name)) {
+                addBoxAnnotation(info);
+                myGraph.update();
+            }
+        }
+
+        // IDEA:
         // if (siteID in dB["WATER_SITES"]) {
         //     $("#name").innerText = dB["WATER_SITES"][siteID]["SITE_NAME"];
         //     $("#description").innerText = dB["WATER_SITES"][siteID]["SITE_DESC"];
@@ -106,50 +118,50 @@ async function queryDB() {
     }
 }
 
-// function addBoxAnnotation(info) {
-//     let it = new Image();
-//     it.src = info["EVT_IMAGE"];
-//     let anno = {
-//         id: info["EVT_TITLE"],
-//         type: 'box',
-//         label: {
-//             content: [info["EVT_TITLE"], info["EVT_DESC"], it],
-//             /*TODO:*/display: true,
-//         },
-//         xMin: info["EVT_STARTDATE"] * 1000,
-//         xMax: info["EVT_ENDDATE"] * 1000,
-//         backgroundColor: 'rgba(255, 99, 132, 0.25)',
-//         enter: function ({ element }) {
-//             return true;
-//         },
-//         click: function ({ chart, element }) {
-//             myGraph.update();
-//             return true;
-//         },
-//         leave: function ({ element }) {
-//             return true;
-//         },
-//         display: false,
-//     };
-//     if (myGraph.scales.x.max > anno.xMax && anno.xMax > myGraph.scales.x.min) {
-//         // At least showing on left of graph so display
-//         anno.display = true;
-//         if (anno.xMin < myGraph.scales.x.min) {
-//             // The left side of range is off the graph so trim
-//             anno._xMin = anno.xMin;
-//             anno.xMin = myGraph.scales.x.min;
-//         }
-//     } else if (myGraph.scales.x.min < anno.xMin && anno.xMin < myGraph.scales.x.max) {
-//         // At least showing on right of graph so display
-//         anno.display = true;
-//         if (anno.xMax > myGraph.scales.x.max) {
-//             // The right side of range is off the graph so trim
-//             anno._xMax = anno.xMin;
-//             anno.xMax = myGraph.scales.x.max;
-//         }
-//     }
-//     annotations.push(anno);
-// }
+function addBoxAnnotation(info) {
+    let it = new Image();
+    it.src = info["EVT_IMAGE"];
+    let anno = {
+        id: info["EVT_TITLE"],
+        type: 'box',
+        label: {
+            content: [info["EVT_TITLE"], info["EVT_DESC"], it],
+            /*TODO:*/display: true,
+        },
+        xMin: info["EVT_STARTDATE"] * 1000,
+        xMax: info["EVT_ENDDATE"] * 1000,
+        backgroundColor: 'rgba(255, 99, 132, 0.25)',
+        enter: function ({ element }) {
+            return true;
+        },
+        click: function ({ chart, element }) {
+            myGraph.update();
+            return true;
+        },
+        leave: function ({ element }) {
+            return true;
+        },
+        display: false,
+    };
+    if (myGraph.scales.x.max > anno.xMax && anno.xMax > myGraph.scales.x.min) {
+        // At least showing on left of graph so display
+        anno.display = true;
+        if (anno.xMin < myGraph.scales.x.min) {
+            // The left side of range is off the graph so trim
+            anno._xMin = anno.xMin;
+            anno.xMin = myGraph.scales.x.min;
+        }
+    } else if (myGraph.scales.x.min < anno.xMin && anno.xMin < myGraph.scales.x.max) {
+        // At least showing on right of graph so display
+        anno.display = true;
+        if (anno.xMax > myGraph.scales.x.max) {
+            // The right side of range is off the graph so trim
+            anno._xMax = anno.xMin;
+            anno.xMax = myGraph.scales.x.max;
+        }
+    }
+    annotations.push(anno);
+}
 
 function makeGraph(ctx, labels, datasets) {
     const options = {
@@ -230,9 +242,6 @@ function parseData(data) {
         values = values.map((dataPoint) => {
             return dataPoint[0];
         });
-
-        console.log(data)
-        console.log(labels)
 
         let obj = { label, data: values, hidden: false };
         datasets.push(obj);
