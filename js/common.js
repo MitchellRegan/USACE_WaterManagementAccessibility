@@ -206,3 +206,11 @@ function toggleLoader() {
         $(LOADER)[0].style.display = "flex";
     }
 }
+
+function toggleInfo() {
+    if ($("#infoCover").style.display == "block") {
+        $("#infoCover").style.display = "none";
+    } else {
+        $("#infoCover").style.display = "block";
+    }
+}

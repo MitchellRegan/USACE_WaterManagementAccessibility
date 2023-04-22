@@ -118,6 +118,52 @@
             </nav>
         </header>
 
+        <section id="infoCover">
+            <div>
+                <h1>Info</h1>
+                <ul>
+                    <li>This web application was developed for the USACE by Mitchell Regan and Matthew Postel.</li>
+                    <li>This page is the admin-only page for adding box-annotations to the graphs.</li>
+                    <li>Press the ⓘ in the corner to bring this up or close this at any time!</li>
+                    <li>Upon loading the page on a mobile device, a prompt should appear to "Add Water Data to Home
+                        screen" (at least on Android). This is entirely optional, but is for your convenience! Simply
+                        tap the prompt and hit install!</li>
+                    <li>Speaking of mobile, you will mostly want to use the application in <i>landscape</i> mode for
+                        best use.</li>
+                </ul>
+                <h1>Steps of use:</h1>
+                <ol>
+                    <li>Enter the name of the event into the "Event Title" box.</li>
+                    <li>Also write out the description into the "Event Description" box.</li>
+                    <li>If you have one, add a direct link to an image you desire displayed with the info.</li>
+                    <li>Enter the start date and time of the event.</li>
+                    <li>Enter the end date and time of the event.</li>
+                    <li>Select the timezone the event took place in.</li>
+                    <li>
+                        Use the search bar in the right pane to find a water location the event affected. The results
+                        are sorted in no particular order.
+                    </li>
+                    <li>Select a location from the list of options. Selecting one will fill in the name into the search
+                        bar.</li>
+                    <li>Press "Add To List".</li>
+                    <li>
+                        The name of the location will be added to a list below the search bar.
+                        <ul>
+                            <li>The "X" button may be pressed to remove the location from the list.</li>
+                        </ul>
+                    </li>
+                    <li>Continue to add each affected site.</li>
+                    <li>
+                        When all locations have been added, press the "Submit" button to send the event to the database.
+                        <ul>
+                            <li>If you are not signed in with a whitelisted account, your event will be <b>rejected</b>.</li>
+                            <li>If there are any errors, the system will prompt you further with advice to fix it. Be sure to read carefully.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+        <span id="infoToggle" onclick="toggleInfo()">ⓘ</span>
         <div style="margin-left:auto; margin-right:auto; text-align:center; min-width: 400px;">
             <h1>New Historical Event</h1>
             <p>This page is for creating a new historical event to show up on the water data graphs. Click <a
@@ -129,7 +175,8 @@
             </div>
 
             <div id="invalidUser">
-                <i class="requiredText">You are not signed in as a member of the USACE. These input fields are only being displayed for testing purposes.</i>
+                <i class="requiredText">You are not signed in as a member of the USACE. These input fields are only
+                    being displayed for testing purposes.</i>
             </div>
         </div>
 
@@ -204,7 +251,8 @@
                 <div id="rightForm">
                     <label for="nameSearch">Affected Water Sites<i class="requiredText">*</i>:</label>
                     <p id="invalidSiteName" style="text-align: center; display:none;"><i class="requiredText"
-                            style="margin:auto">Invalid location name. Please use the search bar and select one of the locations from the list.</i></p>
+                            style="margin:auto">Invalid location name. Please use the search bar and select one of the
+                            locations from the list.</i></p>
                     <div id="" class="fade collapse in">
                         <label for="nameSearch">Search:</label>
                         <input id="nameSearch" type="text" onkeyup="search()" placeholder="Site Name" />

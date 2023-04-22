@@ -3,7 +3,7 @@
     aspect-ratio: 1;
     position: absolute;
     left: 50%;
-    top: 40%;
+    top: 50%;
     transform: translate(-50%, -50%);
     background-color: #003dff;
     border-radius: 50%;
@@ -11,7 +11,7 @@
         0 5px 12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     display: none;
-    z-index: 999;
+    z-index: 99;
 }
 
 .cover {
@@ -19,13 +19,14 @@
     height: 100%;
     position: fixed;
     z-index: 99;
+    top: 0px;
     backdrop-filter: blur(10px);
     display: none;
     text-align: center;
 }
 
 .cover > h1 {
-    top: 60%;
+    top: 70%;
     position: relative;
 }
 

@@ -120,6 +120,46 @@
                 </div>
             </nav>
         </header>
+        <section id="infoCover">
+            <div>
+                <h1>Info</h1>
+                <p>This web application was developed for the USACE by Mitchell Regan and Matthew Postel.</p>
+                <p>Press the ⓘ in the corner to bring this up or close this at any time!</p>
+                <p>Upon loading the page on a mobile device, a prompt should appear to "Add Water Data to Home screen" (at least on Android). This is entirely optional, but is for your convenience! Simply tap the prompt and hit install!</p>
+                <p>Speaking of mobile, you will mostly want to use the application in <i>landscape</i> mode for best use.</p>
+                <h1>Steps of use:</h1>
+                <ol>
+                    <li>
+                        Use the search bar to find a water location you would like to view the data for. Each of the three search boxes further filters the search. The results are sorted in no particular order.
+                        <ul>
+                            <li>Search by Name</li>
+                            <li>Search by City</li>
+                            <li>Search by County</li>
+                        </ul>
+                    </li>
+                    <li>Select a location from the list of options. Selecting one will fill in the name into the search bar.</li>
+                    <li>Press "Search!".</li>
+                    <li>
+                        A list of time series will populate in the sidebar if any are available.
+                        <ul>
+                            <li>The information populated in the sidebar is according to the API, it is not always accurate for some reason, but it can give you a good idea.</li>
+                            <li>Not every timeseries is guraranteed to graph, some do not have data within the selected time interval.</li>
+                            <li>Some water locations have many timeseries options, some have none.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        You may adjust the time range on the search bar to include more or less time in the graph.
+                        <ul>
+                            <li>These date-pickers can be changed at any time. The graph will only update if you press "Graph Timeseries!" again.</li>
+                        </ul>
+                    </li>
+                    <li>Press on "Graph Timeseries!" and wait for the graph to show up.</li>
+                    <li>When the graph shows up you may explore the data (try hovering on data points or tapping highlighted regions!)</li>
+                    <li>You may return to any step along the way and proceed from there!</li>
+                </ol>
+            </div>
+        </section>
+        <span id="infoToggle" onclick="toggleInfo()">ⓘ</span>
         <section id="main">
             <span class="cover">
                 <span class="loader"></span>
