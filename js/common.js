@@ -13,9 +13,6 @@ const NAME_SEARCH = "#nameSearch";
 const CITY_SEARCH = "#citySearch";
 const COUNTY_SEARCH = "#countySearch";
 
-const LOADER = ".loader";
-const COVER = ".cover";
-
 let SELECTED_LOCATION;
 
 /**
@@ -198,12 +195,10 @@ function craftTimeSeriesSelector(metaData) {
 }
 
 function toggleLoader() {
-    if ($(LOADER)[0].style.display == "flex") {
-        $(COVER)[0].style.display = "none";
-        $(LOADER)[0].style.display = "none";
+    if ($("#loaderCover").style.display == "block") {
+        $("#loaderCover").style.display = "none";
     } else {
-        $(COVER)[0].style.display = "block";
-        $(LOADER)[0].style.display = "flex";
+        $("#loaderCover").style.display = "block";
     }
 }
 
@@ -212,5 +207,13 @@ function toggleInfo() {
         $("#infoCover").style.display = "none";
     } else {
         $("#infoCover").style.display = "block";
+    }
+}
+
+function toggleAnnotation() {
+    if ($("#annotationCover").style.display == "block") {
+        $("#annotationCover").style.display = "none";
+    } else {
+        $("#annotationCover").style.display = "block";
     }
 }
