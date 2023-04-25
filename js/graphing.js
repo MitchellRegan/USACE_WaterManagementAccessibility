@@ -173,7 +173,7 @@ function makeGraph(ctx, labels, datasets, unit) {
                 time: {
                     unit: 'hour',
                     displayFormats: {
-                        'hour': 'hh a',
+                        'hour': 'MMM dd, hh a',
                         'day': 'MMM dd',
                         'week': 'MMM dd',
                         'month': 'MMM dd',
