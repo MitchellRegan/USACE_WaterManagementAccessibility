@@ -185,10 +185,8 @@ function craftTimeSeriesSelector(metaData) {
         <h3>${metaData.name.split(".")[1]} ${metaData.name.split(".")[5]}</h3>
         <p>Measuring Interval: ${metaData.interval}</p>
         <p>Recording Unit: ${metaData.units}</p>
-        <p>Supposedly First Recorded On: ${new Date(metaData.extents[0]["earliest-time"]).toDateString()}</p>
-        <p>Supposedly Last Recorded On: ${new Date(metaData.extents[0]["latest-time"]).toDateString()}</p>
         <button onclick="graphTimeSeries(this.parentElement)">Graph Timeseries!</button>
-    `;
+        `;
     result.dataset.json = JSON.stringify(metaData);
     result.classList.add("result");
     $(TIME_SERIES).appendChild(result);
