@@ -172,6 +172,9 @@ async function findTimeSeries() {
  * *This function can be overridden for different displayal.*
  * 
  * *This should really only be called by the {@link findTimeSeries()} function.*  
+ * 
+ * This function used to include 3 extra display lines: "First Recorded, Last Recorded, and Recording Unit." All three of these were always wrong in the API so we removed them.
+ * 
  * @param {JSON} metaData The metadata of a specific timeseries.
  * @private
  */
@@ -184,7 +187,6 @@ function craftTimeSeriesSelector(metaData) {
     result.innerHTML = `
         <h3>${metaData.name.split(".")[1]} ${metaData.name.split(".")[5]}</h3>
         <p>Measuring Interval: ${metaData.interval}</p>
-        <p>Recording Unit: ${metaData.units}</p>
         <button onclick="graphTimeSeries(this.parentElement)">Graph Timeseries!</button>
         `;
     result.dataset.json = JSON.stringify(metaData);
