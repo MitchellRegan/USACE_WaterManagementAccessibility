@@ -67,6 +67,9 @@ body {
     font-size: 50px;
     user-select: none;
 }
+#infoCover {
+    z-index: 100;
+}
 .cover > div {
     box-shadow: #000 0px 0px 20px;
     position: absolute;
