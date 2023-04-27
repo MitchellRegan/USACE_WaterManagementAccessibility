@@ -228,8 +228,8 @@ function parseData(data) {
 
         labels = [];
         for (let i = 0; i < segment["value-count"]; i++) {
-            checkTime = checkTime.addPeriod(period);
             labels.push(checkTime);
+            checkTime = checkTime.addPeriod(period);
         }
         MIN_MAX_TIME = [labels[0].addPeriod(period, -1), labels[labels.length-1].addPeriod(period, 1)];
 
