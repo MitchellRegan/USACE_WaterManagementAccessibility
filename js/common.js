@@ -47,24 +47,23 @@ fetchNameMeta();
 function search() {
     let query = new RegExp($('#nameSearch').value, "i");
     let count = 0;
-    try{
+    try {
         $(SEARCH_RESULTS).innerHTML = "";
         $(TIME_SERIES).innerHTML = "";
-        try{
+        try {
             myGraph.destroy();
         } catch {
             // we don't actually care haha
         }
     }
-    catch(e){
+    catch (e) {
         console.error(e);
     }
-    if ($(NAME_SEARCH).value=="" && $(CITY_SEARCH).value=="" && $(COUNTY_SEARCH).value=="") return;
+    if ($(NAME_SEARCH).value == "" && $(CITY_SEARCH).value == "" && $(COUNTY_SEARCH).value == "") return;
     for (let letter of Object.getOwnPropertyNames(window["names"])) {
         for (let curr of window["names"][letter]) {
             if (matchName(curr, query) && matchCity(curr) && matchCounty(curr)) {
-                count++;
-                craftResult(curr);
+                count += craftResult(curr);
                 if (count >= 5) return;
             }
             if (curr["state"] != undefined) {
@@ -112,6 +111,11 @@ function matchCounty(option) {
  * @private
  */
 function craftResult(metaData) {
+    if (!metaData["public-name"]?.toLowerCase().includes("lake")
+        && !metaData["long-name"]?.toLowerCase().includes("lake")
+        && !metaData["name"]?.toLowerCase().includes("lake")) {
+        return 0;
+    }
     let result = document.createElement('div');
     result.innerHTML = `
         <p>${metaData[PUBLIC_NAME] || metaData["long-name"] || metaData["name"]}</p>
@@ -125,6 +129,7 @@ function craftResult(metaData) {
     result.classList.add("searchResult");
     result.onclick = autoFill;
     $(SEARCH_RESULTS).appendChild(result);
+    return 1;
 }
 
 function autoFill() {
@@ -160,7 +165,7 @@ async function findTimeSeries() {
         if (json.entries.length == 0) {
             $(TIME_SERIES).innerHTML = "<h3>No Time Series Found :(</h3>";
         }
-    } catch(e) {
+    } catch (e) {
         $(TIME_SERIES).innerHTML = "<h3>Error :(</h3>";
     }
     toggleLoader();
