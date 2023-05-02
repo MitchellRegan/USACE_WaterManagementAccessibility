@@ -160,7 +160,9 @@ function makeGraph(ctx, labels, datasets, unit) {
                 title: {
                     display: true,
                     text: `Measurement Value (${unit})`,
-                }
+                },
+                suggestedMin: Math.floor(Math.min(...datasets[0].data)),
+                suggestedMax: Math.ceil(Math.max(...datasets[0].data)),
             },
             x: {
                 min: MIN_MAX_TIME[0],
@@ -231,7 +233,7 @@ function parseData(data) {
             labels.push(checkTime);
             checkTime = checkTime.addPeriod(period);
         }
-        MIN_MAX_TIME = [labels[0].addPeriod(period, -1), labels[labels.length-1].addPeriod(period, 1)];
+        MIN_MAX_TIME = [labels[0].addPeriod(period, -1), labels[labels.length - 1].addPeriod(period, 1)];
 
         values = values.map((dataPoint) => {
             return dataPoint[comment.indexOf("value")];
@@ -250,7 +252,7 @@ function parseData(data) {
 
         let values = dataPoints.map(e => e[comment.indexOf("value")]);
         labels = dataPoints.map(e => new Date(e[comment.indexOf("time")]));
-        
+
         let obj = { label, data: values, hidden: false };
         datasets.push(obj);
     }
