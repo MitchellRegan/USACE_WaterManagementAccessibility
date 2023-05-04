@@ -93,7 +93,7 @@ async function queryAPI(office, name) {
     }
 }
 async function queryDB() {
-    const dBQuery = new Request("https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json/?");
+    const dBQuery = new Request(firebaseConfig.databaseURL + "/HISTORICAL_EVENTS.json/?");
     try {
         let dB = await fetch(dBQuery);
         dB = await dB.json();
