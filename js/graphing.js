@@ -109,8 +109,8 @@ function addBoxAnnotation(info) {
         id: info["EVT_TITLE"],
         type: 'box',
         label: {
-            content: [info["EVT_TITLE"], info["EVT_DESC"], it],
-            display: false,
+            content: [info["EVT_TITLE"], "Click here for more info"],
+            display: true,
         },
         xMin: info["EVT_STARTDATE"] * 1000,
         xMax: info["EVT_ENDDATE"] * 1000,
@@ -119,9 +119,9 @@ function addBoxAnnotation(info) {
             return true;
         },
         click: function ({ chart, element }) {
-            $("#annotation_title").innerText = element.options.label.content[0];
-            $("#annotation_desc").innerText = element.options.label.content[1];
-            $("#annotation_img").src = element.options.label.content[2];
+            $("#annotation_title").innerText = info["EVT_TITLE"];
+            $("#annotation_desc").innerText = info["EVT_DESC"];
+            $("#annotation_img").src = it;
             toggleAnnotation();
             // myGraph.update();
             return true;
