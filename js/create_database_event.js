@@ -5,15 +5,6 @@ Firebase code for initializing the OAuth login.
 Reference: https://github.com/firebase/firebaseui-web
 */
 function initApp() {
-    const firebaseConfig = {
-        apiKey: "AIzaSyAr7SQASmasb7pk7E3OHhuewJoY76CcJ30",
-        authDomain: "mregan-capstone.firebaseapp.com",
-        databaseURL: "https://mregan-capstone-default-rtdb.firebaseio.com",
-        projectId: "mregan-capstone",
-        storageBucket: "mregan-capstone.appspot.com",
-        messagingSenderId: "736102415357",
-        appId: "1:736102415357:web:06211517f034486cc37794"
-    };
     const app = firebase.initializeApp(firebaseConfig);
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -220,7 +211,7 @@ async function writeDatabaseEvt(email, title, desc, startDate, endDate, timezone
         "EVT_SITES": sites
     };
     
-    fetch('https://mregan-capstone-default-rtdb.firebaseio.com/HISTORICAL_EVENTS.json?auth='+idToken, {
+    fetch(firebaseConfig.databaseURL+'/HISTORICAL_EVENTS.json?auth='+idToken, {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
